@@ -16,17 +16,6 @@ GameWindow::~GameWindow() {
 	}
 }
 
-// Functions to get information about game surface
-SDL_Surface* GameWindow::getSurface() {
-	return surface;
-}
-int GameWindow::getWidth() {
-	return surface->w;
-}
-int GameWindow::getHeight() {
-	return surface->h;
-}
-
 // Tells game window to keep track of object
 void GameWindow::trackObject(Object* obj) {
 	obj->setWindow(this);

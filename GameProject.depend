@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1276678268 source:c:\users\benjamin xiao\documents\cs projects\gameproject\src\main.cpp
+1276723225 source:c:\users\benjamin xiao\documents\cs projects\gameproject\src\main.cpp
 	<iostream>
 	<SDL/SDL.h>
 	"helpers.h"
@@ -186,13 +186,13 @@
 	"begin_code.h"
 	"close_code.h"
 
-1276677762 source:c:\users\benjamin xiao\documents\cs projects\gameproject\src\gamewindow.cpp
+1276712581 source:c:\users\benjamin xiao\documents\cs projects\gameproject\src\gamewindow.cpp
 	<vector>
 	<SDL/SDL.h>
 	"GameWindow.h"
 	"Object.h"
 
-1276673599 c:\users\benjamin xiao\documents\cs projects\gameproject\src\gamewindow.h
+1276712581 c:\users\benjamin xiao\documents\cs projects\gameproject\src\gamewindow.h
 	<vector>
 	<SDL/SDL.h>
 
@@ -201,20 +201,21 @@
 	"Object.h"
 	"GameWindow.h"
 
-1276676243 c:\users\benjamin xiao\documents\cs projects\gameproject\src\object.h
+1276719751 c:\users\benjamin xiao\documents\cs projects\gameproject\src\object.h
 	<SDL/SDL.h>
 
-1276678095 source:c:\users\benjamin xiao\documents\cs projects\gameproject\src\player.cpp
+1276724956 source:c:\users\benjamin xiao\documents\cs projects\gameproject\src\player.cpp
 	<SDL/SDL.h>
 	"Player.h"
 	"Object.h"
 	"GameWindow.h"
+	"helpers.h"
 
-1276678060 c:\users\benjamin xiao\documents\cs projects\gameproject\src\player.h
+1276724956 c:\users\benjamin xiao\documents\cs projects\gameproject\src\player.h
 	<SDL/SDL.h>
 	"Object.h"
 
-1276678060 c:\users\benjamin xiao\documents\cs projects\gameproject\src\helpers.h
+1276720237 c:\users\benjamin xiao\documents\cs projects\gameproject\src\helpers.h
 	<SDL/SDL.h>
 	<SDL/SDL_image.h>
 

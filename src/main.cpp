@@ -10,7 +10,7 @@ using namespace std;
 void startGame() {
 	// Initialize game data
 	GameWindow window(1280, 800);
-	Player player(10, 10, 0);
+	Player player(10, 10, 0, 20, -30, 2);
 	window.trackObject(&player);
 
 	// Run main game loop
@@ -28,7 +28,7 @@ void startGame() {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					return;
 				if (event.key.keysym.sym == SDLK_f) {
-					SDL_Surface* surface = window.getSurface();
+					SDL_Surface* surface = window.area();
 					surface = SDL_SetVideoMode(surface->w, surface->h, 32, (surface->flags & SDL_FULLSCREEN ? 0 : SDL_FULLSCREEN));
 				}
 			}

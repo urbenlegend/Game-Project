@@ -20,7 +20,7 @@ public:
 
 	Object(int _x, int _y, int _rot);
 	virtual ~Object() {}
-	void setWindow(GameWindow* win);
+	virtual void setWindow(GameWindow* win);
 
 	virtual void update() = 0;
 	virtual void draw() = 0;

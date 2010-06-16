@@ -19,9 +19,16 @@ public:
 	GameWindow(int w, int h);
 	~GameWindow();
 
-	SDL_Surface* getSurface();
-	int getWidth();
-	int getHeight();
+	// Inline functions to get information about game surface
+	SDL_Surface* area() {
+		return surface;
+	}
+	int width() {
+		return surface->w;
+	}
+	int height() {
+		return surface->h;
+	}
 
 	void trackObject(Object* obj);
 
