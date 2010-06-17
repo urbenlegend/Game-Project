@@ -7,7 +7,7 @@
 using namespace std;
 
 GameWindow::GameWindow(int w, int h) {
-	surface = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_ANYFORMAT);
+	surface = SDL_SetVideoMode(w, h, 32, SDL_ANYFORMAT);
 }
 
 GameWindow::~GameWindow() {

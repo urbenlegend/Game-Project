@@ -18,7 +18,7 @@ Player::Player(int _x, int _y, int _rot, int move, int jump, int wgt) : Object(_
 }
 
 Player::~Player() {
-	//dtor
+	SDL_FreeSurface(surface);
 }
 
 void Player::setWindow(GameWindow* win) {
@@ -32,17 +32,26 @@ void Player::setWindow(GameWindow* win) {
 
 // Update player state
 void Player::update() {
+	// Set velocities according to user input
 	Uint8* keystate = SDL_GetKeyState(NULL);
-	if (keystate[SDLK_LEFT])
-		x -= move_speed;
-	else if (keystate[SDLK_RIGHT])
-		x += move_speed;
-	if (keystate[SDLK_UP] && midjump == false) {
+	if (keystate[SDLK_LEFT]) {
+		// Move left
+		dx = -move_speed;
+	}
+	else if (keystate[SDLK_RIGHT]) {
+		// Move right
+		dx = move_speed;
+	}
+	if (keystate[SDLK_UP] && dy == 0 && midjump == false) {
+		// Jump up
+		// We need to check that player is not falling or in middle of a jump before
+		// setting jump velocity
 		midjump = true;
 		dy = jump_speed;
 	}
 
 	// Apply velocities
+	x += dx;
 	y += dy;
 	// Apply accelerations
 	dy += weight;
@@ -65,6 +74,11 @@ void Player::update() {
 		dy = 0;
 	}
 
+	// If we're not midjump we should simulate friction
+	// For now just set x velocity to zero
+	if (midjump == false) {
+		dx = 0;
+	}
 }
 
 // Draw player to window surface
