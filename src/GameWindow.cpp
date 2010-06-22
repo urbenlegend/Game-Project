@@ -12,8 +12,19 @@ GameWindow::GameWindow(int w, int h) {
 }
 
 GameWindow::~GameWindow() {
-	for (size_t i = 0; i < objects.size(); i++) {
-		delete objects[i];
+	// Delete level objects
+	for (size_t i = 0; i < level.size(); i++) {
+		delete level[i];
+	}
+
+	// Update projectiles
+	for (size_t i = 0; i < projectiles.size(); i++) {
+		delete projectiles[i];
+	}
+
+	// Delete players
+	for (size_t i = 0; i < players.size(); i++) {
+		delete players[i];
 	}
 }
 
@@ -37,9 +48,19 @@ void GameWindow::addPlayer(Object* obj) {
 
 // Update states of all objects that its keeping track of
 void GameWindow::update() {
-	// Tell all objects to update their state
-	for (size_t i = 0; i < objects.size(); i++) {
-		objects[i]->update();
+	// Tell level objects to update their state
+	for (size_t i = 0; i < level.size(); i++) {
+		level[i]->update();
+	}
+
+	// Update projectiles
+	for (size_t i = 0; i < projectiles.size(); i++) {
+		projectiles[i]->update();
+	}
+
+	// Update players
+	for (size_t i = 0; i < players.size(); i++) {
+		players[i]->update();
 	}
 }
 

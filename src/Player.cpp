@@ -58,13 +58,13 @@ void Player::update() {
 
 	// Collision detection with walls of window
 	// TODO: collision detection with other objects
-	if (x > window->width() - surface->w) {
+	if (x >= window->width() - surface->w) {
 		x = window->width() - surface->w;
 	}
 	else if (x < 0) {
 		x = 0;
 	}
-	if (y > window->height() - surface->h) {
+	if (y >= window->height() - surface->h) {
 		y = window->height() - surface->h;
 		dy = 0;
 		midjump = false;
