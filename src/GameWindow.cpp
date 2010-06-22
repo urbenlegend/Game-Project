@@ -16,10 +16,22 @@ GameWindow::~GameWindow() {
 	}
 }
 
-// Tells game window to keep track of object
-void GameWindow::trackObject(Object* obj) {
+// Tells game window to keep track of a level object
+void GameWindow::addLevelObj(Object* obj) {
 	obj->setWindow(this);
-	objects.push_back(obj);
+	level.push_back(obj);
+}
+
+// Tells game window to keep track of a projectile
+void GameWindow::addProjectile(Object* obj) {
+	obj->setWindow(this);
+	projectiles.push_back(obj);
+}
+
+// Add player to window
+void GameWindow::addPlayer(Object* obj) {
+	obj->setWindow(this);
+	players.push_back(obj);
 }
 
 // Update states of all objects that its keeping track of
@@ -35,9 +47,19 @@ void GameWindow::draw() {
 	// Blank screen
 	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
 
-	// Tell all objects to draw to surface
-	for (size_t i = 0; i < objects.size(); i++) {
-		objects[i]->draw();
+	// Draw Level
+	for (size_t i = 0; i < level.size(); i++) {
+		level[i]->draw();
+	}
+
+	// Draw projectiles
+	for (size_t i = 0; i < projectiles.size(); i++) {
+		projectiles[i]->draw();
+	}
+
+	// Draw players
+	for (size_t i = 0; i < players.size(); i++) {
+		players[i]->draw();
 	}
 
 	// Flip surface after all objects have drawn

@@ -12,8 +12,12 @@ class GameWindow {
 private:
 	// Window surface
 	SDL_Surface* surface;
-	// Objects that this game window is keepign track of
-	vector<Object*> objects;
+	// Objects that are part of the level
+	vector<Object*> level;
+	// Projectiles that in the game window
+	vector<Object*> projectiles;
+	// Players
+	vector<Object*> players;
 
 public:
 	GameWindow(int w, int h);
@@ -30,7 +34,9 @@ public:
 		return surface->h;
 	}
 
-	void trackObject(Object* obj);
+	void addLevelObj(Object* obj);
+	void addProjectile(Object* prj);
+	void addPlayer(Object* plyr);
 
 	void update();
 	void draw();
