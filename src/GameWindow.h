@@ -34,6 +34,8 @@ public:
 
 	void update();
 	void draw();
+
+	void play();
 };
 
 #endif // GAMEWINDOW_H
