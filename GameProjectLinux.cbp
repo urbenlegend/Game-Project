@@ -7,8 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin\Debug\GameProject" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Debug\" />
+				<Option output="bin/Debug/GameProject" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -16,8 +16,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin\Release\GameProject" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj\Release\" />
+				<Option output="bin/Release/GameProject" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -30,20 +30,18 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="SDL\include" />
 		</Compiler>
 		<Linker>
-			<Add option="-lmingw32 -lSDLmain -lSDL -lSDL_image" />
-			<Add directory="SDL\lib" />
+			<Add option="-lSDLmain -lSDL -lSDL_image" />
 		</Linker>
-		<Unit filename="src\GameWindow.cpp" />
-		<Unit filename="src\GameWindow.h" />
-		<Unit filename="src\Object.cpp" />
-		<Unit filename="src\Object.h" />
-		<Unit filename="src\Player.cpp" />
-		<Unit filename="src\Player.h" />
-		<Unit filename="src\helpers.h" />
-		<Unit filename="src\main.cpp" />
+		<Unit filename="src/GameWindow.cpp" />
+		<Unit filename="src/GameWindow.h" />
+		<Unit filename="src/Object.cpp" />
+		<Unit filename="src/Object.h" />
+		<Unit filename="src/Player.cpp" />
+		<Unit filename="src/Player.h" />
+		<Unit filename="src/helpers.h" />
+		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
