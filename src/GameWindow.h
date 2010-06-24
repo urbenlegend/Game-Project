@@ -7,7 +7,12 @@
 using namespace std;
 
 class Object;
+class Player;
 
+
+/* GameWindow Class: Container for all game objects. Its main game loop
+ * ensures that all objects are updating their states and painting properly
+ */
 class GameWindow {
 private:
 	// Window surface
@@ -17,7 +22,7 @@ private:
 	// Projectiles that in the game window
 	vector<Object*> projectiles;
 	// Players
-	vector<Object*> players;
+	vector<Player*> players;
 
 public:
 	GameWindow(int w, int h);
@@ -36,7 +41,7 @@ public:
 
 	void addLevelObj(Object* obj);
 	void addProjectile(Object* prj);
-	void addPlayer(Object* plyr);
+	void addPlayer(Player* plyr);
 
 	void update();
 	void draw();

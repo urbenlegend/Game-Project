@@ -15,8 +15,7 @@ int main(int argc, char* argv[]) {
 
 	// Start the game
 	GameWindow window(1280, 800);
-	Player player(10, 10, 0, 20, -30, 2);
-	window.addPlayer(&player);
+	window.addPlayer(new Player(10, 10, 20, -30, 2, "data/player1.jpg"));
 	window.play();
 
 	SDL_Quit();

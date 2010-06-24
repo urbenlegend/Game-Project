@@ -3,12 +3,13 @@
 
 #include "GameWindow.h"
 #include "Object.h"
+#include "Player.h"
 #include "helpers.h"
 
 using namespace std;
 
 GameWindow::GameWindow(int w, int h) {
-	surface = SDL_SetVideoMode(w, h, 32, SDL_ANYFORMAT);
+	surface = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_ANYFORMAT);
 }
 
 GameWindow::~GameWindow() {
@@ -41,7 +42,7 @@ void GameWindow::addProjectile(Object* obj) {
 }
 
 // Add player to window
-void GameWindow::addPlayer(Object* obj) {
+void GameWindow::addPlayer(Player* obj) {
 	obj->setWindow(this);
 	players.push_back(obj);
 }
@@ -52,12 +53,10 @@ void GameWindow::update() {
 	for (size_t i = 0; i < level.size(); i++) {
 		level[i]->update();
 	}
-
 	// Update projectiles
 	for (size_t i = 0; i < projectiles.size(); i++) {
 		projectiles[i]->update();
 	}
-
 	// Update players
 	for (size_t i = 0; i < players.size(); i++) {
 		players[i]->update();
@@ -73,12 +72,10 @@ void GameWindow::draw() {
 	for (size_t i = 0; i < level.size(); i++) {
 		level[i]->draw();
 	}
-
 	// Draw projectiles
 	for (size_t i = 0; i < projectiles.size(); i++) {
 		projectiles[i]->draw();
 	}
-
 	// Draw players
 	for (size_t i = 0; i < players.size(); i++) {
 		players[i]->draw();

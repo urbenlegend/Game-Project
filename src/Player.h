@@ -7,10 +7,11 @@
 
 using namespace std;
 
+/* Player Class: Object that represents a player controlled character
+ * Has input logic and physics calculations
+ */
 class Player : public Object {
-private:
-	// Player image
-	SDL_Surface* surface;
+protected:
 	// Physics variables
 	int dx;
 	int dy;
@@ -20,12 +21,11 @@ private:
 	int jump_speed;
 	int weight;
 public:
-	Player(int _x, int _y, int _rot, int move, int jump, int wgt);
+	Player(int _x, int _y, int move, int jump, int wgt, string imageFile);
 	virtual ~Player();
-	virtual void setWindow(GameWindow* win);
+	//virtual void setWindow(GameWindow* win);
 
 	virtual void update();
-	virtual void draw();
 };
 
 #endif // PLAYER_H

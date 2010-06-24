@@ -1,14 +1,13 @@
+#include <string>
 #include <SDL/SDL.h>
 
 #include "Player.h"
 #include "Object.h"
 #include "GameWindow.h"
-#include "helpers.h"
 
 using namespace std;
 
-Player::Player(int _x, int _y, int _rot, int move, int jump, int wgt) : Object(_x, _y, _rot){
-	surface = NULL;
+Player::Player(int _x, int _y, int move, int jump, int wgt, string imageFile) : Object(_x, _y, imageFile) {
 	dx = 0;
 	dy = 0;
 	midjump = false;
@@ -18,17 +17,12 @@ Player::Player(int _x, int _y, int _rot, int move, int jump, int wgt) : Object(_
 }
 
 Player::~Player() {
-	SDL_FreeSurface(surface);
+	// Nothing player-specific to destroy
 }
 
-void Player::setWindow(GameWindow* win) {
-	window = win;
-	// Initialize player image with pixel format of window
-	// It's just a white rectangle for now
-	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, 30, 70, window->area()->format->BitsPerPixel,
-											 0x00ff0000, 0x0000ff00, 0x000000ff, (window->area()->format->BitsPerPixel == 32 ? 0xff000000 : 0));
-	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 255, 255, 255));
-}
+/*void Player::setWindow(GameWindow* win) {
+
+}*/
 
 // Update player state
 void Player::update() {
@@ -43,7 +37,7 @@ void Player::update() {
 		dx = move_speed;
 	}
 	if (keystate[SDLK_UP] && dy == 0 && midjump == false) {
-		// Jump up
+		// Jump upk
 		// We need to check that player is not falling or in middle of a jump before
 		// setting jump velocity
 		midjump = true;
@@ -79,10 +73,4 @@ void Player::update() {
 	if (midjump == false) {
 		dx = 0;
 	}
-}
-
-// Draw player to window surface
-void Player::draw() {
-	SDL_Rect drawRect = SDL_CreateRect(x, y);
-	SDL_BlitSurface(surface, NULL, window->area(), &drawRect);
 }
