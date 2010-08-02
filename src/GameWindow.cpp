@@ -61,6 +61,16 @@ void GameWindow::update() {
 	for (size_t i = 0; i < players.size(); i++) {
 		players[i]->update();
 	}
+
+	// Run collision detection and react accordingly
+	// For now just have players die when they touch something
+	for (size_t i = 0; i < players.size(); i++) {
+		for (size_t j = 0; j < level.size(); j++) {
+			if (players[i]->checkCollision(*level[j])) {
+				players.erase(players.begin() + i);
+			}
+		}
+	}
 }
 
 // Draw window
@@ -108,6 +118,6 @@ void GameWindow::play() {
 		}
 
 		// Cap fps so game doesn't draw too fast and use up all the cpu
-		cap_fps(start, 30);
+		cap_fps(start, 60);
 	}
 }

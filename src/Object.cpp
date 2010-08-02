@@ -4,7 +4,7 @@
 #include "GameWindow.h"
 #include "helpers.h"
 
-Object::Object(int _x, int _y, string imageFile) {
+Object::Object(string imageFile, int _x, int _y) {
 	x = _x;
 	y = _y;
 	surface = IMG_Load(imageFile.c_str());
@@ -24,9 +24,25 @@ void Object::setWindow(GameWindow* win) {
 	surface = temp;
 }
 
-// Check for collision between two objects
+// Check for collision between two objects using basic bounding boxes
 bool Object::checkCollision(Object& obj) {
+	// Bounding extents for this object
+	int left1 = x;
+	int right1 = x + surface->w;
+	int top1 = y;
+	int bottom1 = y + surface->h;
+	// Bounding extents for obj
+	int left2 = obj.x;
+	int right2 = obj.x + obj.surface->w;
+	int top2 = obj.y;
+	int bottom2 = obj.y + obj.surface->h;
 
+	if (left1 > right2) return false;
+	if (right1 < left2) return false;
+	if (top1 > bottom2) return false;
+	if (bottom1 < top2) return false;
+
+	return true;
 }
 
 // Update function that updates object state

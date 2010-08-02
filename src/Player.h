@@ -16,14 +16,14 @@ protected:
 	int dx;
 	int dy;
 	bool midjump;
-	// Velocity and acceleration variables
-	int move_speed;
-	int jump_speed;
-	int weight;
 public:
-	Player(int _x, int _y, int move, int jump, int wgt, string imageFile);
+	// Velocity and acceleration variables
+	int move_spd;
+	int jump_spd;
+	int weight;
+
+	Player(string imageFile, int _x, int _y, int _move_spd, int _jump_spd, int _weight);
 	virtual ~Player();
-	//virtual void setWindow(GameWindow* win);
 
 	virtual void update();
 };

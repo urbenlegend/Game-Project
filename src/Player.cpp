@@ -7,22 +7,18 @@
 
 using namespace std;
 
-Player::Player(int _x, int _y, int move, int jump, int wgt, string imageFile) : Object(_x, _y, imageFile) {
+Player::Player(string imageFile, int _x, int _y, int _move_spd, int _jump_spd, int _weight) : Object(imageFile, _x, _y) {
 	dx = 0;
 	dy = 0;
 	midjump = false;
-	move_speed = move;
-	jump_speed = jump;
-	weight = wgt;
+	move_spd = _move_spd;
+	jump_spd = _jump_spd;
+	weight = _weight;
 }
 
 Player::~Player() {
 	// Nothing player-specific to destroy
 }
-
-/*void Player::setWindow(GameWindow* win) {
-
-}*/
 
 // Update player state
 void Player::update() {
@@ -30,18 +26,18 @@ void Player::update() {
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	if (keystate[SDLK_LEFT]) {
 		// Move left
-		dx = -move_speed;
+		dx = -move_spd;
 	}
 	else if (keystate[SDLK_RIGHT]) {
 		// Move right
-		dx = move_speed;
+		dx = move_spd;
 	}
 	if (keystate[SDLK_UP] && dy == 0 && midjump == false) {
-		// Jump upk
+		// Jump up
 		// We need to check that player is not falling or in middle of a jump before
 		// setting jump velocity
 		midjump = true;
-		dy = jump_speed;
+		dy = jump_spd;
 	}
 
 	// Apply velocities

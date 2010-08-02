@@ -21,7 +21,7 @@ public:
 	int x;
 	int y;
 
-	Object(int _x, int _y, string imageFile);
+	Object(string imageFile, int _x, int _y);
 	virtual ~Object();
 	virtual void setWindow(GameWindow* win);
 
