@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Player::Player(string imageFile, int _x, int _y, int _move_spd, int _jump_spd, int _weight) : Object(imageFile, _x, _y) {
+Player::Player(SDL_Surface* image, int _x, int _y, int _move_spd, int _jump_spd, int _weight) : Object(image, _x, _y) {
 	dx = 0;
 	dy = 0;
 	midjump = false;
@@ -46,8 +46,17 @@ void Player::update() {
 	// Apply accelerations
 	dy += weight;
 
+	// Collision detection with level objects
+	const vector<Object*>& level = window->getLevel();
+	for (size_t i = 0; i < level.size(); i++) {
+		if (checkCollision(*level[i])) {
+			dx = 0;
+			dy = 0;
+			midjump = false;
+		}
+	}
+
 	// Collision detection with walls of window
-	// TODO: collision detection with other objects
 	if (x >= window->width() - surface->w) {
 		x = window->width() - surface->w;
 	}

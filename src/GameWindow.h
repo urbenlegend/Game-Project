@@ -28,16 +28,12 @@ public:
 	GameWindow(int w, int h);
 	~GameWindow();
 
-	// Inline functions to get information about game surface
-	SDL_Surface* area() {
-		return surface;
-	}
-	int width() {
-		return surface->w;
-	}
-	int height() {
-		return surface->h;
-	}
+	SDL_Surface* getSurface();
+	int width();
+	int height();
+	const vector<Object*>& getLevel();
+	const vector<Object*>& getProjectiles();
+	const vector<Player*>& getPlayers();
 
 	void addLevelObj(Object* obj);
 	void addProjectile(Object* prj);
@@ -48,5 +44,25 @@ public:
 
 	void play();
 };
+
+// Functions to get information about game surface
+inline SDL_Surface* GameWindow::getSurface() {
+	return surface;
+}
+inline int GameWindow::width() {
+	return surface->w;
+}
+inline int GameWindow::height() {
+	return surface->h;
+}
+inline const vector<Object*>& GameWindow::getLevel() {
+	return level;
+}
+inline const vector<Object*>& GameWindow::getProjectiles() {
+	return projectiles;
+}
+inline const vector<Player*>& GameWindow::getPlayers() {
+	return players;
+}
 
 #endif // GAMEWINDOW_H

@@ -4,10 +4,10 @@
 #include "GameWindow.h"
 #include "helpers.h"
 
-Object::Object(string imageFile, int _x, int _y) {
+Object::Object(SDL_Surface* image, int _x, int _y) {
 	x = _x;
 	y = _y;
-	surface = IMG_Load(imageFile.c_str());
+	surface = image;
 	window = NULL;
 }
 
@@ -23,6 +23,20 @@ void Object::setWindow(GameWindow* win) {
 	SDL_FreeSurface(surface);
 	surface = temp;
 }
+
+void Object::setSurface(SDL_Surface* image) {
+	// Delete previous surface and set image as surface
+	SDL_FreeSurface(surface);
+	surface = image;
+
+	// Convert surface to window format if window is known
+	if (window != NULL) {
+		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
+		SDL_FreeSurface(surface);
+		surface = temp;
+	}
+}
+
 
 // Check for collision between two objects using basic bounding boxes
 bool Object::checkCollision(Object& obj) {
@@ -53,5 +67,5 @@ void Object::update() {
 // Draw function that blits object surface to the window
 void Object::draw() {
 	SDL_Rect drawRect = SDL_CreateRect(x, y);
-	SDL_BlitSurface(surface, NULL, window->area(), &drawRect);
+	SDL_BlitSurface(surface, NULL, window->getSurface(), &drawRect);
 }

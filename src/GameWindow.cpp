@@ -61,16 +61,6 @@ void GameWindow::update() {
 	for (size_t i = 0; i < players.size(); i++) {
 		players[i]->update();
 	}
-
-	// Run collision detection and react accordingly
-	// For now just have players die when they touch something
-	for (size_t i = 0; i < players.size(); i++) {
-		for (size_t j = 0; j < level.size(); j++) {
-			if (players[i]->checkCollision(*level[j])) {
-				players.erase(players.begin() + i);
-			}
-		}
-	}
 }
 
 // Draw window

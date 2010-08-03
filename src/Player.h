@@ -22,7 +22,7 @@ public:
 	int jump_spd;
 	int weight;
 
-	Player(string imageFile, int _x, int _y, int _move_spd, int _jump_spd, int _weight);
+	Player(SDL_Surface* image, int _x, int _y, int _move_spd, int _jump_spd, int _weight);
 	virtual ~Player();
 
 	virtual void update();

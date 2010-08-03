@@ -21,9 +21,13 @@ public:
 	int x;
 	int y;
 
-	Object(string imageFile, int _x, int _y);
+	Object(SDL_Surface* image, int _x, int _y);
 	virtual ~Object();
 	virtual void setWindow(GameWindow* win);
+	virtual void setSurface(SDL_Surface* image);
+
+	int width();
+	int height();
 
 	virtual bool checkCollision(Object& obj);
 
@@ -31,4 +35,11 @@ public:
 	virtual void draw();
 };
 
+// Functions to access surface attributes
+inline int Object::width() {
+	return surface->w;
+}
+inline int Object::height() {
+	return surface->h;
+}
 #endif // OBJECT_H
