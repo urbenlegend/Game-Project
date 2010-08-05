@@ -16,30 +16,34 @@ protected:
 	// Window this object is registered to
 	GameWindow* window;
 
+	// Position and velocity variables
+	int dx;
+	int dy;
 public:
-	// Position variables
 	int x;
 	int y;
 
 	Object(SDL_Surface* image, int _x, int _y);
 	virtual ~Object();
+
+	int width() const;
+	int height() const;
+
 	virtual void setWindow(GameWindow* win);
 	virtual void setSurface(SDL_Surface* image);
 
-	int width();
-	int height();
-
-	virtual bool checkCollision(Object& obj);
+	virtual bool checkCollision(Object& obj, int* new_x = NULL, int* new_y = NULL) const;
 
 	virtual void update();
-	virtual void draw();
+	virtual void draw() const;
 };
 
 // Functions to access surface attributes
-inline int Object::width() {
+inline int Object::width() const {
 	return surface->w;
 }
-inline int Object::height() {
+inline int Object::height() const {
 	return surface->h;
 }
+
 #endif // OBJECT_H

@@ -12,9 +12,6 @@ using namespace std;
  */
 class Player : public Object {
 protected:
-	// Physics variables
-	int dx;
-	int dy;
 	bool midjump;
 public:
 	// Velocity and acceleration variables

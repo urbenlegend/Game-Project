@@ -17,7 +17,8 @@ int main(int argc, char* argv[]) {
 	// Start the game
 	GameWindow window(1280, 800);
 
-	window.addPlayer(new Player(IMG_Load("data/player1.jpg"), 10, 10, 20, -30, 2));
+	// Load level
+	window.addPlayer(new Player(IMG_Load("data/player1.jpg"), 10, 10, 10, -20, 1));
 	SDL_Surface* block1 = SDL_CreateRGBSurface(SDL_HWSURFACE, 400, 30, 32, 0, 0, 0, 0);
 	SDL_FillRect(block1, NULL, SDL_MapRGB(block1->format, 255, 255, 255));
 	window.addLevelObj(new Object(block1, 600, 700));

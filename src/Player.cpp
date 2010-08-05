@@ -8,8 +8,6 @@
 using namespace std;
 
 Player::Player(SDL_Surface* image, int _x, int _y, int _move_spd, int _jump_spd, int _weight) : Object(image, _x, _y) {
-	dx = 0;
-	dy = 0;
 	midjump = false;
 	move_spd = _move_spd;
 	jump_spd = _jump_spd;
@@ -48,23 +46,24 @@ void Player::update() {
 
 	// Collision detection with level objects
 	const vector<Object*>& level = window->getLevel();
+	// Compare extents with all collidable level objects
 	for (size_t i = 0; i < level.size(); i++) {
-		if (checkCollision(*level[i])) {
+		if (checkCollision(*level[i], &x, &y)) {
+			midjump = false;
 			dx = 0;
 			dy = 0;
-			midjump = false;
 		}
 	}
 
 	// Collision detection with walls of window
-	if (x >= window->width() - surface->w) {
-		x = window->width() - surface->w;
+	if (x >= window->width() - width()) {
+		x = window->width() - width();
 	}
 	else if (x < 0) {
 		x = 0;
 	}
-	if (y >= window->height() - surface->h) {
-		y = window->height() - surface->h;
+	if (y >= window->height() - height()) {
+		y = window->height() - height();
 		dy = 0;
 		midjump = false;
 	}
