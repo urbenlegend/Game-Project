@@ -2,6 +2,7 @@
 #define GAMEWINDOW_H
 
 #include <vector>
+#include <string>
 #include <SDL/SDL.h>
 
 using namespace std;
@@ -38,6 +39,7 @@ public:
 	void addLevelObj(Object* obj);
 	void addProjectile(Object* prj);
 	void addPlayer(Player* plyr);
+	void loadLevel(string filename);
 
 	void update();
 	void draw();

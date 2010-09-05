@@ -32,7 +32,7 @@ public:
 	virtual void setWindow(GameWindow* win);
 	virtual void setSurface(SDL_Surface* image);
 
-	virtual bool checkCollision(Object& obj, int* new_x = NULL, int* new_y = NULL) const;
+	virtual bool checkCollision(Object& obj) const;
 
 	virtual void update();
 	virtual void draw() const;

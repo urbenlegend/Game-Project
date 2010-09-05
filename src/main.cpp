@@ -18,17 +18,9 @@ int main(int argc, char* argv[]) {
 	GameWindow window(1280, 800);
 
 	// Load level
-	window.addPlayer(new Player(IMG_Load("data/player1.jpg"), 10, 10, 10, -20, 1));
-	SDL_Surface* block1 = SDL_CreateRGBSurface(SDL_HWSURFACE, 400, 30, 32, 0, 0, 0, 0);
-	SDL_FillRect(block1, NULL, SDL_MapRGB(block1->format, 255, 255, 255));
-	window.addLevelObj(new Object(block1, 600, 700));
-	SDL_Surface* block2 = SDL_CreateRGBSurface(SDL_HWSURFACE, 400, 30, 32, 0, 0, 0, 0);
-	SDL_FillRect(block2, NULL, SDL_MapRGB(block2->format, 255, 255, 255));
-	window.addLevelObj(new Object(block2, 800, 300));
-	SDL_Surface* block3 = SDL_CreateRGBSurface(SDL_HWSURFACE, 400, 30, 32, 0, 0, 0, 0);
-	SDL_FillRect(block3, NULL, SDL_MapRGB(block3->format, 255, 255, 255));
-	window.addLevelObj(new Object(block3, 200, 500));
+	window.loadLevel("data/testlevel.txt");
 
+    // Begin game loop
 	window.play();
 
 	SDL_Quit();

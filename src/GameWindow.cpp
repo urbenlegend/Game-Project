@@ -1,4 +1,5 @@
 #include <vector>
+#include <fstream>
 #include <SDL/SDL.h>
 
 #include "GameWindow.h"
@@ -36,15 +37,58 @@ void GameWindow::addLevelObj(Object* obj) {
 }
 
 // Tells game window to keep track of a projectile
-void GameWindow::addProjectile(Object* obj) {
-	obj->setWindow(this);
-	projectiles.push_back(obj);
+void GameWindow::addProjectile(Object* prj) {
+	prj->setWindow(this);
+	projectiles.push_back(prj);
 }
 
 // Add player to window
-void GameWindow::addPlayer(Player* obj) {
-	obj->setWindow(this);
-	players.push_back(obj);
+void GameWindow::addPlayer(Player* plyr) {
+	plyr->setWindow(this);
+	players.push_back(plyr);
+}
+
+void GameWindow::loadLevel(string filename)
+{
+    int tile_height;
+    int tile_width;
+    string line;
+
+    ifstream infile(filename.c_str());
+    if (infile.is_open())
+    {
+        while (!infile.eof())
+        {
+            infile >> line;
+            if (line == "tilewidth")
+                infile >> tile_width;
+            else if (line == "tileheight")
+                infile >> tile_height;
+            else if (line == "mapstart")
+            {
+                int row = 0;
+                int col = 0;
+                while (line != "mapend")
+                {
+                    getline(infile,line);
+                    for (col = 0; col < line.length(); col++)
+                    {
+                        if (line[col] == '-')
+                        {
+                            SDL_Surface* block = SDL_CreateRGBSurface(SDL_HWSURFACE, tile_width, tile_height, 32, 0, 0, 0, 0);
+                            SDL_FillRect(block, NULL, SDL_MapRGB(block->format, 255, 255, 255));
+                            addLevelObj(new Object(block, col*tile_width, row*tile_height));
+                        }
+                        else if (line[col] == '*')
+                        {
+                            addPlayer(new Player(IMG_Load("data/player1.jpg"), col*tile_width, row*tile_height, 10, -20, 1));
+                        }
+                    }
+                    row++;
+                }
+            }
+        }
+    }
 }
 
 // Update states of all objects that its keeping track of

@@ -38,38 +38,38 @@ void Player::update() {
 		dy = jump_spd;
 	}
 
-	// Apply velocities
+	// Apply x velocity
 	x += dx;
-	y += dy;
-	// Apply accelerations
-	dy += weight;
-
-	// Collision detection with level objects
+	// Collision detection with level objects in the x axis
 	const vector<Object*>& level = window->getLevel();
 	// Compare extents with all collidable level objects
 	for (size_t i = 0; i < level.size(); i++) {
-		if (checkCollision(*level[i], &x, &y)) {
-			midjump = false;
+		if (checkCollision(*level[i])) {
+			if (dx < 0) {
+                x = level[i]->x + level[i]->width();
+            }
+            else if (dx > 0) {
+                x = level[i]->x - width();
+            }
 			dx = 0;
-			dy = 0;
 		}
 	}
 
-	// Collision detection with walls of window
-	if (x >= window->width() - width()) {
-		x = window->width() - width();
-	}
-	else if (x < 0) {
-		x = 0;
-	}
-	if (y >= window->height() - height()) {
-		y = window->height() - height();
-		dy = 0;
-		midjump = false;
-	}
-	else if (y < 0) {
-		y = 0;
-		dy = 0;
+	// Apply y velocity and gravity acceleration
+	y += dy;
+	dy += weight;
+	// Collision detection with level objects in the y axis
+	for (size_t i = 0; i < level.size(); i++) {
+		if (checkCollision(*level[i])) {
+            if (dy < 0) {
+                y = level[i]->y + level[i]->height();
+            }
+            else if (dy > 0) {
+                y = level[i]->y - height();
+                midjump = false;
+            }
+			dy = 0;
+		}
 	}
 
 	// If we're not midjump we should simulate friction
