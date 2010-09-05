@@ -1,5 +1,6 @@
 tilewidth 32
 tileheight 32
+player data/player1.jpg 10 -20 1
 
 mapstart
 ----------------------------------------
@@ -13,7 +14,7 @@ mapstart
 -                                      -
 -                                      -
 -                                      -
--       *                              -
+-       0                              -
 -                                      -
 -                         ----         -
 -                                      -

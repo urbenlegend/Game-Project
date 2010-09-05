@@ -9,6 +9,13 @@
 
 using namespace std;
 
+struct player_t {
+		string pic;
+		int move_spd;
+		int jump_spd;
+		int weight;
+};
+
 GameWindow::GameWindow(int w, int h) {
 	surface = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_ANYFORMAT);
 }
@@ -48,47 +55,75 @@ void GameWindow::addPlayer(Player* plyr) {
 	players.push_back(plyr);
 }
 
-void GameWindow::loadLevel(string filename)
-{
+// Loads a tile-based level from textfile specified by filename
+// Returns 0 if level is loaded successfully
+// -1 if level completely fails to load
+// > 0 if level is partially loaded.
+int GameWindow::loadLevel(string filename) {
+	int load_status = 0;
     int tile_height;
     int tile_width;
+    vector<player_t> plrs;
     string line;
 
     ifstream infile(filename.c_str());
-    if (infile.is_open())
-    {
-        while (!infile.eof())
-        {
-            infile >> line;
-            if (line == "tilewidth")
-                infile >> tile_width;
-            else if (line == "tileheight")
-                infile >> tile_height;
-            else if (line == "mapstart")
-            {
-                int row = 0;
-                int col = 0;
-                while (line != "mapend")
-                {
-                    getline(infile,line);
-                    for (col = 0; col < line.length(); col++)
-                    {
-                        if (line[col] == '-')
-                        {
-                            SDL_Surface* block = SDL_CreateRGBSurface(SDL_HWSURFACE, tile_width, tile_height, 32, 0, 0, 0, 0);
-                            SDL_FillRect(block, NULL, SDL_MapRGB(block->format, 255, 255, 255));
-                            addLevelObj(new Object(block, col*tile_width, row*tile_height));
-                        }
-                        else if (line[col] == '*')
-                        {
-                            addPlayer(new Player(IMG_Load("data/player1.jpg"), col*tile_width, row*tile_height, 10, -20, 1));
-                        }
-                    }
-                    row++;
-                }
-            }
-        }
+    if (!infile.is_open()) {
+    	// Return failure if filename is invalid
+    	return -1;
     }
+
+	while (!infile.eof()) {
+		infile >> line;
+		if (line == "tilewidth")
+			infile >> tile_width;
+		else if (line == "tileheight")
+			infile >> tile_height;
+		else if (line == "player") {
+			player_t plr;
+			infile >> plr.pic;
+			infile >> plr.move_spd;
+			infile >> plr.jump_spd;
+			infile >> plr.weight;
+			plrs.push_back(plr);
+		}
+		else if (line == "mapstart") {
+			size_t row = 0;
+			size_t col = 0;
+			while (line != "mapend") {
+				getline(infile,line);
+				for (col = 0; col < line.length(); col++) {
+					if (line[col] == '-') {
+						SDL_Surface* block = SDL_CreateRGBSurface(SDL_HWSURFACE, tile_width, tile_height, 32, 0, 0, 0, 0);
+						SDL_FillRect(block, NULL, SDL_MapRGB(block->format, 255, 255, 255));
+						addLevelObj(new Object(block, col*tile_width, row*tile_height));
+					}
+					// If symbol is a player spawn number, load corresponding player from player_pics
+					else if (isdigit(line[col])) {
+						// Convert char to to integer
+						char symbol[2];
+						symbol[0] = line[col];
+						symbol[1] = 0;
+						size_t num = atoi(symbol);
+						// Load player
+						if (num < plrs.size()) {
+							SDL_Surface* player_pic = IMG_Load(plrs[num].pic.c_str());
+							if (player_pic != NULL) {
+								addPlayer(new Player(player_pic, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight));
+							}
+							else {
+								load_status = 1;
+							}
+						}
+						else {
+							load_status = 1;
+						}
+					}
+				}
+				row++;
+			}
+		}
+	}
+	return load_status;
 }
 
 // Update states of all objects that its keeping track of

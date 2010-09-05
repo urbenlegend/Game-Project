@@ -18,12 +18,12 @@ int main(int argc, char* argv[]) {
 	GameWindow window(1280, 800);
 
 	// Load level
-	window.loadLevel("data/testlevel.txt");
+	int success = window.loadLevel("data/testlevel.txt");
 
     // Begin game loop
 	window.play();
 
 	SDL_Quit();
 
-	return 0;
+	return success;
 }

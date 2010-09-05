@@ -39,7 +39,7 @@ public:
 	void addLevelObj(Object* obj);
 	void addProjectile(Object* prj);
 	void addPlayer(Player* plyr);
-	void loadLevel(string filename);
+	int loadLevel(string filename);
 
 	void update();
 	void draw();
