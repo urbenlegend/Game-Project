@@ -6,6 +6,27 @@
 
 using namespace std;
 
+// Splits a string into several tokens separated by any character in the
+// delimiter string. Stores tokens into a vector array for easy access
+inline void split_tokens(const string line, vector<string>& tokens, string delimiter = " ") {
+	// Substring positions
+	size_t begin = 0;
+	size_t end = 0;
+
+	while (end < line.length()) {
+		// Extract token into temp
+		end = line.find_first_of(delimiter, begin);
+		string temp = line.substr(begin, end - begin);
+
+		// Put temp into vector if it isn't an empty string
+		if (temp.length() != 0) {
+			tokens.push_back(temp);
+		}
+
+		begin = end + 1;
+	}
+}
+
 // Cap fps
 inline void cap_fps(Uint32 start, Uint32 fps) {
 	Uint32 delay = 1000 / fps;

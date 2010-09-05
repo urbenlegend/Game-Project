@@ -9,13 +9,6 @@
 
 using namespace std;
 
-struct player_t {
-		string pic;
-		int move_spd;
-		int jump_spd;
-		int weight;
-};
-
 GameWindow::GameWindow(int w, int h) {
 	surface = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_ANYFORMAT);
 }
@@ -63,6 +56,13 @@ int GameWindow::loadLevel(string filename) {
 	int load_status = 0;
     int tile_height;
     int tile_width;
+    struct player_t {
+		string pic;
+		string sprite;
+		int move_spd;
+		int jump_spd;
+		int weight;
+	};
     vector<player_t> plrs;
     string line;
 
@@ -81,6 +81,7 @@ int GameWindow::loadLevel(string filename) {
 		else if (line == "player") {
 			player_t plr;
 			infile >> plr.pic;
+			infile >> plr.sprite;
 			infile >> plr.move_spd;
 			infile >> plr.jump_spd;
 			infile >> plr.weight;
@@ -108,7 +109,10 @@ int GameWindow::loadLevel(string filename) {
 						if (num < plrs.size()) {
 							SDL_Surface* player_pic = IMG_Load(plrs[num].pic.c_str());
 							if (player_pic != NULL) {
-								addPlayer(new Player(player_pic, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight));
+								Player* new_player = new Player(player_pic, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
+								new_player->loadSprite(plrs[num].sprite);
+								new_player->startSprite(0);
+								addPlayer(new_player);
 							}
 							else {
 								load_status = 1;
