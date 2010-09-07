@@ -14,12 +14,15 @@ class Player : public Object {
 protected:
 	bool midjump;
 public:
-	// Velocity and acceleration variables
-	int move_spd;
-	int jump_spd;
-	int weight;
+	// Physics variables
+	double dx;
+	double dy;
+	double ax;
+	double ay;
+	double move_spd;
+	double jump_spd;
 
-	Player(SDL_Surface* image, int _x, int _y, int _move_spd, int _jump_spd, int _weight);
+	Player(SDL_Surface* image, int _x, int _y, double _move_spd, double _jump_spd, double _ay);
 	virtual ~Player();
 
 	virtual void update();

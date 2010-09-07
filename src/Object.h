@@ -30,11 +30,12 @@ protected:
 	// The amount of time the frame has been displayed
 	Uint32 frame_duration;
 
+	// Sprite update function
+	// Make sure to call this if you override update in a subclass
+	virtual void updateSprite();
 
-	// Position and velocity variables
-	int dx;
-	int dy;
 public:
+	// Position variables
 	int x;
 	int y;
 
@@ -46,11 +47,12 @@ public:
 
 	virtual void setWindow(GameWindow* win);
 	virtual void setSurface(SDL_Surface* image);
+
 	virtual int loadSprite(string filename);
+	virtual void startSprite(int num);
 
 	virtual bool checkCollision(Object& obj) const;
 
-	virtual void startSprite(int num);
 	virtual void update();
 	virtual void draw();
 };

@@ -10,7 +10,6 @@ using namespace std;
 class Object;
 class Player;
 
-
 /* GameWindow Class: Container for all game objects. Its main game loop
  * ensures that all objects are updating their states and painting properly
  */

@@ -1,11 +1,12 @@
 #include <vector>
 #include <fstream>
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 
 #include "GameWindow.h"
 #include "Object.h"
 #include "Player.h"
-#include "helpers.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -59,9 +60,9 @@ int GameWindow::loadLevel(string filename) {
     struct player_t {
 		string pic;
 		string sprite;
-		int move_spd;
-		int jump_spd;
-		int weight;
+		double move_spd;
+		double jump_spd;
+		double weight;
 	};
     vector<player_t> plrs;
     string line;
@@ -111,7 +112,6 @@ int GameWindow::loadLevel(string filename) {
 							if (player_pic != NULL) {
 								Player* new_player = new Player(player_pic, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
 								new_player->loadSprite(plrs[num].sprite);
-								new_player->startSprite(0);
 								addPlayer(new_player);
 							}
 							else {
@@ -191,6 +191,6 @@ void GameWindow::play() {
 		}
 
 		// Cap fps so game doesn't draw too fast and use up all the cpu
-		cap_fps(start, 60);
+		cap_fps(start, cg_fps);
 	}
 }

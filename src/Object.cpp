@@ -3,15 +3,13 @@
 
 #include "Object.h"
 #include "GameWindow.h"
-#include "helpers.h"
+#include "globals.h"
 
 Object::Object(SDL_Surface* image, int _x, int _y) {
 	surface = image;
 	window = NULL;
 	x = _x;
 	y = _y;
-	dx = 0;
-	dy = 0;
 	anim_num = -1;
 	frame_num = -1;
 	frame_duration = -1;
@@ -81,6 +79,40 @@ int Object::loadSprite(string filename) {
 	return load_status;
 }
 
+// Start sprite animation designated by num
+// Setting num to -1 turns off sprite animation
+// Setting num to the current animation does nothing
+void Object::startSprite(int num) {
+	if (num == -1) {
+		anim_num = -1;
+		frame_num = -1;
+		frame_duration = -1;
+	}
+	else if (anim_num != num && num < sprites.size()) {
+		anim_num = num;
+		frame_num = 0;
+		frame_duration = 0;
+	}
+}
+
+void Object::updateSprite() {
+	// Do nothing if sprite does not exist or no animation has been started
+	if (anim_num == -1 || frame_num == -1) return;
+
+	// Move to next frame if previous frame has exceeded display duration
+	if (frame_duration > sprites[anim_num][frame_num].duration) {
+			if (frame_num < sprites[anim_num].size() - 1) {
+				frame_num++;
+			}
+			else {
+				frame_num = 0;
+			}
+			frame_duration = 0;
+	}
+	else {
+		frame_duration++;
+	}
+}
 
 // Check for collision between two objects using basic bounding boxes
 inline bool Object::checkCollision(Object& obj) const {
@@ -103,46 +135,18 @@ inline bool Object::checkCollision(Object& obj) const {
 	return true;
 }
 
-// Start sprite animation designated by num
-void Object::startSprite(int num) {
-	if (num == -1) {
-		anim_num = -1;
-		frame_num = -1;
-		frame_duration = -1;
-	}
-	else if (num < sprites.size()) {
-		anim_num = num;
-		frame_num = 0;
-		frame_duration = 0;
-	}
-}
-
 // Update function that updates object state
 void Object::update() {
-	// Apply dx and dy
-	x += dx;
-	y += dy;
+	updateSprite();
 }
 
 // Draw function that blits object surface to the window
 void Object::draw() {
 	SDL_Rect drawRect = SDL_CreateRect(x, y);
 	// If no sprites, paint entire surface
-	if (anim_num == -1 || frame_num == -1) {
+	if (anim_num == -1 || frame_num == -1)
 		SDL_BlitSurface(surface, NULL, window->getSurface(), &drawRect);
-	}
 	// If sprites are defined, paint sprite area only
-	else {
-		if (frame_duration > sprites[anim_num][frame_num].duration) {
-			if (frame_num < sprites[anim_num].size() - 1) {
-				frame_num++;
-			}
-			else {
-				frame_num = 0;
-			}
-			frame_duration = 0;
-		}
+	else
 		SDL_BlitSurface(surface, &sprites[anim_num][frame_num].area, window->getSurface(), &drawRect);
-		frame_duration++;
-	}
 }
