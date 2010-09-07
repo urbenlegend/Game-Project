@@ -12,6 +12,12 @@ class GameWindow;
 /* Object Class: Generic object class that all game objects have to inherit from.
    Supports bounding box collisions and sprite animations.
 */
+
+struct SpriteFrame {
+	SDL_Rect area;
+	unsigned int duration;
+};
+
 class Object {
 protected:
 	// Surface containing the object's appearance
@@ -20,11 +26,7 @@ protected:
 	GameWindow* window;
 
 	// Sprite data
-	struct SpriteFrame {
-		SDL_Rect area;
-		unsigned int duration;
-	};
-	vector<vector<SpriteFrame>> sprites;
+	vector<vector<SpriteFrame> > sprites;
 	int anim_num;
 	int frame_num;
 	// The amount of time the frame has been displayed

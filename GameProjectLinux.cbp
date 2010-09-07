@@ -29,7 +29,6 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++0x" />
 			<Add option="-Wall" />
 		</Compiler>
 		<Linker>
@@ -41,7 +40,8 @@
 		<Unit filename="src/Object.h" />
 		<Unit filename="src/Player.cpp" />
 		<Unit filename="src/Player.h" />
-		<Unit filename="src/helpers.h" />
+		<Unit filename="src/globals.cpp" />
+		<Unit filename="src/globals.h" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />

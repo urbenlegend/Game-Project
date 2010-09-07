@@ -10,6 +10,14 @@
 
 using namespace std;
 
+struct player_t {
+	string pic;
+	string sprite;
+	double move_spd;
+	double jump_spd;
+	double weight;
+};
+
 GameWindow::GameWindow(int w, int h) {
 	surface = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_ANYFORMAT);
 }
@@ -57,13 +65,6 @@ int GameWindow::loadLevel(string filename) {
 	int load_status = 0;
     int tile_height;
     int tile_width;
-    struct player_t {
-		string pic;
-		string sprite;
-		double move_spd;
-		double jump_spd;
-		double weight;
-	};
     vector<player_t> plrs;
     string line;
 

@@ -44,7 +44,7 @@ void Object::setSurface(SDL_Surface* image) {
 // Load sprite data
 // Returns 0 on success, -1 on failure, and > 0 on partial load
 int Object::loadSprite(string filename) {
-	ifstream fin(filename);
+	ifstream fin(filename.c_str());
 	if (!fin.is_open()) return -1;
 
 	// Load data
