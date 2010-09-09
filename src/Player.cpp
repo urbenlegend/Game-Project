@@ -47,12 +47,18 @@ void Player::update() {
 	}
 	else if (keystate[SDLK_LEFT]) {
 		// Move left
+		// Cancel out previous horizontal velocity
+		if (ax > 0)
+			dx = 0;
 		ax = -g_axfactor * move_spd;
 		// Initiate walking animation
 		startSprite(1);
 	}
 	else if (keystate[SDLK_RIGHT]) {
 		// Move right
+		// Cancel out previous horizontal velocity
+		if (ax < 0)
+			dx = 0;
 		ax = g_axfactor * move_spd;
 		// Initiate walking animation
 		startSprite(1);

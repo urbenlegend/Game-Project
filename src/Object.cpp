@@ -95,6 +95,8 @@ void Object::startSprite(int num) {
 	}
 }
 
+// Sprite update function
+// Make sure to call this if you override update in a subclass
 void Object::updateSprite() {
 	// Do nothing if sprite does not exist or no animation has been started
 	if (anim_num == -1 || frame_num == -1) return;

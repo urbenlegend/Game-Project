@@ -1,6 +1,6 @@
 tilewidth 32
 tileheight 32
-player data/mariosheet.png data/mario.txt 10 -20 1
+player data/mariosheet.png data/mario.txt 5 -20 1
 
 mapstart
 ----------------------------------------
@@ -21,7 +21,7 @@ mapstart
 -                                      -
 -                 --                   -
 -                                      -
--                                      -
+-          ---                         -
 -    --                                -
 -                                      -
 -                                      -

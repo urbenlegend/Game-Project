@@ -32,8 +32,6 @@ protected:
 	// The amount of time the frame has been displayed
 	Uint32 frame_duration;
 
-	// Sprite update function
-	// Make sure to call this if you override update in a subclass
 	virtual void updateSprite();
 
 public:
