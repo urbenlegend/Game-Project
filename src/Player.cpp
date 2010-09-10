@@ -32,8 +32,8 @@ void Player::update() {
 	}
 
 	// Set velocities according to user input
-	Uint8* keystate = SDL_GetKeyState(NULL);
-	if (keystate[SDLK_UP] && dy == 0 && midjump == false) {
+	Uint8* keystate = SDL_GetKeyboardState(NULL);
+	if (keystate[SDL_SCANCODE_UP] && dy == 0 && midjump == false) {
 		// Jump up
 		// We need to check that player is not falling or in middle of a jump before
 		// setting jump velocity
@@ -45,23 +45,25 @@ void Player::update() {
 		// Initiate jump animation
 		startSprite(2);
 	}
-	else if (keystate[SDLK_LEFT]) {
+	else if (keystate[SDL_SCANCODE_LEFT]) {
 		// Move left
 		// Cancel out previous horizontal velocity
 		if (ax > 0)
 			dx = 0;
 		ax = -g_axfactor * move_spd;
-		// Initiate walking animation
-		startSprite(1);
+		// Initiate walking animation if not midjump
+		if (midjump == false)
+			startSprite(1);
 	}
-	else if (keystate[SDLK_RIGHT]) {
+	else if (keystate[SDL_SCANCODE_RIGHT]) {
 		// Move right
 		// Cancel out previous horizontal velocity
 		if (ax < 0)
 			dx = 0;
 		ax = g_axfactor * move_spd;
-		// Initiate walking animation
-		startSprite(1);
+		// Initiate walking animation if not midjump
+		if (midjump == false)
+			startSprite(1);
 	}
 	else {
 		ax = 0;
