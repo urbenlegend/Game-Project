@@ -19,7 +19,8 @@ struct player_t {
 };
 
 GameWindow::GameWindow(int w, int h) {
-	surface = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_ANYFORMAT);
+	window = SDL_CreateWindow("GameProject", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);
+	SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTFLIP2|SDL_RENDERER_ACCELERATED);
 }
 
 GameWindow::~GameWindow() {
@@ -37,6 +38,7 @@ GameWindow::~GameWindow() {
 	for (size_t i = 0; i < players.size(); i++) {
 		delete players[i];
 	}
+	SDL_DestroyWindow(window);
 }
 
 // Tells game window to keep track of a level object
@@ -98,7 +100,9 @@ int GameWindow::loadLevel(string filename) {
 					if (line[col] == '-') {
 						SDL_Surface* block = SDL_CreateRGBSurface(SDL_HWSURFACE, tile_width, tile_height, 32, 0, 0, 0, 0);
 						SDL_FillRect(block, NULL, SDL_MapRGB(block->format, 255, 255, 255));
-						addLevelObj(new Object(block, col*tile_width, row*tile_height));
+						SDL_Texture* tex = SDL_CreateTextureFromSurface(SDL_PIXELFORMAT_UNKNOWN, block);
+						SDL_FreeSurface(block);
+						addLevelObj(new Object(tex, col*tile_width, row*tile_height));
 					}
 					// If symbol is a player spawn number, load corresponding player from player_pics
 					else if (isdigit(line[col])) {
@@ -111,7 +115,8 @@ int GameWindow::loadLevel(string filename) {
 						if (num < plrs.size()) {
 							SDL_Surface* player_pic = IMG_Load(plrs[num].pic.c_str());
 							if (player_pic != NULL) {
-								Player* new_player = new Player(player_pic, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
+								SDL_Texture* tex = SDL_CreateTextureFromSurface(SDL_PIXELFORMAT_UNKNOWN, player_pic);
+								Player* new_player = new Player(tex, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
 								new_player->loadSprite(plrs[num].sprite);
 								addPlayer(new_player);
 							}
@@ -150,7 +155,8 @@ void GameWindow::update() {
 // Draw window
 void GameWindow::draw() {
 	// Blank screen
-	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
+	SDL_SelectRenderer(window);
+	SDL_RenderClear();
 
 	// Draw Level
 	for (size_t i = 0; i < level.size(); i++) {
@@ -165,8 +171,8 @@ void GameWindow::draw() {
 		players[i]->draw();
 	}
 
-	// Flip surface after all objects have drawn
-	SDL_Flip(surface);
+	// Render all drawn content
+	SDL_RenderPresent();
 }
 
 // Main game loop
@@ -180,13 +186,16 @@ void GameWindow::play() {
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT)
-				return;
+			if (event.type == SDL_WINDOWEVENT) {
+				if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+					return;
+			}
 			if (event.type == SDL_KEYDOWN) {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					return;
 				if (event.key.keysym.sym == SDLK_f) {
-					surface = SDL_SetVideoMode(surface->w, surface->h, 32, (surface->flags & SDL_FULLSCREEN ? surface->flags & ~SDL_FULLSCREEN: surface->flags | SDL_FULLSCREEN));
+					Uint32 flags = SDL_GetWindowFlags(window);
+					SDL_SetWindowFullscreen(window, (flags & SDL_WINDOW_FULLSCREEN ? 0 : 1));
 				}
 			}
 		}

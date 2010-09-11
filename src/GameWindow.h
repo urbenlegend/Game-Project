@@ -16,7 +16,7 @@ class Player;
 class GameWindow {
 private:
 	// Window surface
-	SDL_Surface* surface;
+	SDL_Window* window;
 	// Objects that are part of the level
 	vector<Object*> level;
 	// Projectiles that in the game window
@@ -28,7 +28,7 @@ public:
 	GameWindow(int w, int h);
 	~GameWindow();
 
-	SDL_Surface* getSurface();
+	SDL_Window* getWindow();
 	int width();
 	int height();
 	const vector<Object*>& getLevel();
@@ -47,14 +47,18 @@ public:
 };
 
 // Functions to get information about game surface
-inline SDL_Surface* GameWindow::getSurface() {
-	return surface;
+inline SDL_Window* GameWindow::getWindow() {
+	return window;
 }
 inline int GameWindow::width() {
-	return surface->w;
+	int width;
+	SDL_GetWindowSize(window, &width, NULL);
+	return width;
 }
 inline int GameWindow::height() {
-	return surface->h;
+	int height;
+	SDL_GetWindowSize(window, NULL, &height);
+	return height;
 }
 inline const vector<Object*>& GameWindow::getLevel() {
 	return level;

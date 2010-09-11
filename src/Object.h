@@ -21,7 +21,7 @@ struct SpriteFrame {
 class Object {
 protected:
 	// Surface containing the object's appearance
-	SDL_Surface* surface;
+	SDL_Texture* surface;
 	// Window this object is registered to
 	GameWindow* window;
 
@@ -39,14 +39,14 @@ public:
 	int x;
 	int y;
 
-	Object(SDL_Surface* image, int _x, int _y);
+	Object(SDL_Texture* image, int _x, int _y);
 	virtual ~Object();
 
 	int width() const;
 	int height() const;
 
 	virtual void setWindow(GameWindow* win);
-	virtual void setSurface(SDL_Surface* image);
+	virtual void setSurface(SDL_Texture* image);
 
 	virtual int loadSprite(string filename);
 	virtual void startSprite(int num);
@@ -59,14 +59,20 @@ public:
 
 // Functions to access surface attributes
 inline int Object::width() const {
-	if (anim_num == -1 || frame_num == -1)
-		return surface->w;
+	if (anim_num == -1 || frame_num == -1) {
+		int width;
+		SDL_QueryTexture(surface, NULL, NULL, &width, NULL);
+		return width;
+	}
 	else
 		return sprites[anim_num][frame_num].area.w;
 }
 inline int Object::height() const {
-	if (anim_num == -1 || frame_num == -1)
-		return surface->h;
+	if (anim_num == -1 || frame_num == -1) {
+		int height;
+		SDL_QueryTexture(surface, NULL, NULL, NULL, &height);
+		return height;
+	}
 	else
 		return sprites[anim_num][frame_num].area.h;
 }

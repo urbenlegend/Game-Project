@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Player::Player(SDL_Surface* image, int _x, int _y, double _move_spd, double _jump_spd, double _ay) : Object(image, _x, _y) {
+Player::Player(SDL_Texture* image, int _x, int _y, double _move_spd, double _jump_spd, double _ay) : Object(image, _x, _y) {
 	midjump = false;
 	dx = 0;
 	dy = 0;

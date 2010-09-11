@@ -5,7 +5,7 @@
 #include "GameWindow.h"
 #include "globals.h"
 
-Object::Object(SDL_Surface* image, int _x, int _y) {
+Object::Object(SDL_Texture* image, int _x, int _y) {
 	surface = image;
 	window = NULL;
 	x = _x;
@@ -16,29 +16,17 @@ Object::Object(SDL_Surface* image, int _x, int _y) {
 }
 
 Object::~Object() {
-	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(surface);
 }
 
 void Object::setWindow(GameWindow* win) {
 	window = win;
-	// Now that we know the window we should reformat the object surface
-	// to match the window's surface for faster blitting.
-	SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
-	SDL_FreeSurface(surface);
-	surface = temp;
 }
 
-void Object::setSurface(SDL_Surface* image) {
+void Object::setSurface(SDL_Texture* image) {
 	// Delete previous surface and set image as surface
-	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(surface);
 	surface = image;
-
-	// Convert surface to window format if window is known
-	if (window != NULL) {
-		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
-		SDL_FreeSurface(surface);
-		surface = temp;
-	}
 }
 
 // Load sprite data
@@ -144,11 +132,13 @@ void Object::update() {
 
 // Draw function that blits object surface to the window
 void Object::draw() {
-	SDL_Rect drawRect = SDL_CreateRect(x, y);
+	// Select renderer that object belongs to
+	SDL_SelectRenderer(window->getWindow());
+	SDL_Rect drawRect = SDL_CreateRect(x, y, width(), height());
 	// If no sprites, paint entire surface
 	if (anim_num == -1 || frame_num == -1)
-		SDL_BlitSurface(surface, NULL, window->getSurface(), &drawRect);
+		SDL_RenderCopy(surface, NULL, &drawRect);
 	// If sprites are defined, paint sprite area only
 	else
-		SDL_BlitSurface(surface, &sprites[anim_num][frame_num].area, window->getSurface(), &drawRect);
+		SDL_RenderCopy(surface, &sprites[anim_num][frame_num].area, &drawRect);
 }

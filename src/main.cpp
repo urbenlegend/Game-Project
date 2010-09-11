@@ -21,7 +21,8 @@ int main(int argc, char* argv[]) {
 	int success = window.loadLevel("data/testlevel.txt");
 
     // Begin game loop
-	window.play();
+    if (success != -1)
+		window.play();
 
 	SDL_Quit();
 
