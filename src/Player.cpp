@@ -67,7 +67,7 @@ void Player::update() {
 	}
 
 	// Apply x velocity and acceleration
-	x += dx;
+	x += (int)dx;
 	dx += ax;
 	// Cap x velocity at move_spd
 	if (dx > move_spd) {
@@ -92,7 +92,7 @@ void Player::update() {
 	}
 
 	// Apply y velocity and acceleration
-	y += dy;
+	y += (int)dy;
 	dy += ay;
 	// Collision detection with level objects in the y axis
 	for (size_t i = 0; i < level.size(); i++) {
