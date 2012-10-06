@@ -1,4 +1,5 @@
 #include <string>
+
 #include <SDL.h>
 
 #include "Player.h"
@@ -8,7 +9,8 @@
 
 using namespace std;
 
-Player::Player(SDL_Surface* image, int _x, int _y, double _move_spd, double _jump_spd, double _ay) : Object(image, _x, _y) {
+Player::Player(Sprite* _playerSprite, int _x, int _y, double _move_spd, double _jump_spd, double _ay) : Object(NULL, _x, _y) {
+	playerSprite = _playerSprite;
 	midjump = false;
 	dx = 0;
 	dy = 0;
@@ -19,16 +21,21 @@ Player::Player(SDL_Surface* image, int _x, int _y, double _move_spd, double _jum
 }
 
 Player::~Player() {
-	// Nothing player-specific to destroy
+	delete playerSprite;
+}
+
+void Player::setWindow(GameWindow* win) {
+	Object::setWindow(win);
+	playerSprite->optimizeSurface();
 }
 
 // Update player state
 void Player::update() {
-	updateSprite();
+	playerSprite->update();
 
 	// If player is not moving
 	if (dx == 0 && dy == 0 && midjump == false) {
-		startSprite(0);
+		playerSprite->startAnim(0);
 	}
 
 	// Set velocities according to user input
@@ -43,19 +50,19 @@ void Player::update() {
 		// remaining horizontal force unless left or right keys are pressed.
 		ax = 0;
 		// Initiate jump animation
-		startSprite(2);
+		playerSprite->startAnim(2);
 	}
 	else if (keystate[SDLK_LEFT]) {
 		// Move left
 		ax = -g_axfactor * move_spd;
 		// Initiate walking animation
-		startSprite(1);
+		playerSprite->startAnim(1);
 	}
 	else if (keystate[SDLK_RIGHT]) {
 		// Move right
 		ax = g_axfactor * move_spd;
 		// Initiate walking animation
-		startSprite(1);
+		playerSprite->startAnim(1);
 	}
 	else {
 		ax = 0;
@@ -107,4 +114,17 @@ void Player::update() {
 			dy = 0;
 		}
 	}
+}
+
+void Player::draw() {
+	SDL_Rect drawRect = SDL_CreateRect(x, y);
+	playerSprite->draw(window->getSurface(), drawRect);
+}
+
+int Player::width() const {
+	return playerSprite->width();
+}
+
+int Player::height() const {
+	return playerSprite->height();
 }

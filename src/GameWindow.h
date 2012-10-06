@@ -1,8 +1,8 @@
-#ifndef GAMEWINDOW_H
-#define GAMEWINDOW_H
+#pragma once
 
 #include <vector>
 #include <string>
+
 #include <SDL.h>
 
 using namespace std;
@@ -65,5 +65,3 @@ inline const vector<Object*>& GameWindow::getProjectiles() {
 inline const vector<Player*>& GameWindow::getPlayers() {
 	return players;
 }
-
-#endif // GAMEWINDOW_H

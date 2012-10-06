@@ -1,9 +1,9 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include <SDL.h>
 
 #include "Object.h"
+#include "Sprite.h"
 
 using namespace std;
 
@@ -12,6 +12,7 @@ using namespace std;
  */
 class Player : public Object {
 protected:
+	Sprite* playerSprite;
 	bool midjump;
 public:
 	// Physics variables
@@ -22,10 +23,14 @@ public:
 	double move_spd;
 	double jump_spd;
 
-	Player(SDL_Surface* image, int _x, int _y, double _move_spd, double _jump_spd, double _ay);
+	Player(Sprite* _playerSprite, int _x, int _y, double _move_spd, double _jump_spd, double _ay);
 	virtual ~Player();
 
-	virtual void update();
-};
+	virtual void setWindow(GameWindow* win);
 
-#endif // PLAYER_H
+	virtual int width() const;
+	virtual int height() const;
+
+	virtual void update();
+	virtual void draw();
+};

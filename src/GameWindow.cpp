@@ -1,17 +1,19 @@
 #include <vector>
 #include <fstream>
+
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include "globals.h"
 #include "GameWindow.h"
 #include "Object.h"
 #include "Player.h"
-#include "globals.h"
+#include "Sprite.h"
+
 
 using namespace std;
 
 struct player_t {
-	string pic;
 	string sprite;
 	double move_spd;
 	double jump_spd;
@@ -82,7 +84,6 @@ int GameWindow::loadLevel(string filename) {
 			infile >> tile_height;
 		else if (line == "player") {
 			player_t plr;
-			infile >> plr.pic;
 			infile >> plr.sprite;
 			infile >> plr.move_spd;
 			infile >> plr.jump_spd;
@@ -109,15 +110,10 @@ int GameWindow::loadLevel(string filename) {
 						size_t num = atoi(symbol);
 						// Load player
 						if (num < plrs.size()) {
-							SDL_Surface* player_pic = IMG_Load(plrs[num].pic.c_str());
-							if (player_pic != NULL) {
-								Player* new_player = new Player(player_pic, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
-								new_player->loadSprite(plrs[num].sprite);
-								addPlayer(new_player);
-							}
-							else {
-								load_status = 1;
-							}
+							Sprite* playerSprite = new Sprite();
+							load_status = playerSprite->load(plrs[num].sprite);
+							Player* new_player = new Player(playerSprite, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
+							addPlayer(new_player);
 						}
 						else {
 							load_status = 1;
