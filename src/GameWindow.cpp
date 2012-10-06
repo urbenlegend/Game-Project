@@ -1,7 +1,7 @@
 #include <vector>
 #include <fstream>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "GameWindow.h"
 #include "Object.h"

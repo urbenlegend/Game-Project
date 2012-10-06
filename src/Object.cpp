@@ -1,5 +1,5 @@
 #include <fstream>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include "Object.h"
 #include "GameWindow.h"
