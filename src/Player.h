@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include <SDL.h>
 
@@ -27,5 +26,3 @@ public:
 
 	virtual void update();
 };
-
-#endif // PLAYER_H

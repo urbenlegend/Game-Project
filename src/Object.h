@@ -1,5 +1,4 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -32,10 +31,6 @@ protected:
 	// The amount of time the frame has been displayed
 	Uint32 frame_duration;
 
-	// Sprite update function
-	// Make sure to call this if you override update in a subclass
-	virtual void updateSprite();
-
 public:
 	// Position variables
 	int x;
@@ -52,25 +47,10 @@ public:
 
 	virtual int loadSprite(string filename);
 	virtual void startSprite(int num);
+	virtual void updateSprite();
 
 	virtual bool checkCollision(Object& obj) const;
 
 	virtual void update();
 	virtual void draw();
 };
-
-// Functions to access surface attributes
-inline int Object::width() const {
-	if (anim_num == -1 || frame_num == -1)
-		return surface->w;
-	else
-		return sprites[anim_num][frame_num].area.w;
-}
-inline int Object::height() const {
-	if (anim_num == -1 || frame_num == -1)
-		return surface->h;
-	else
-		return sprites[anim_num][frame_num].area.h;
-}
-
-#endif // OBJECT_H

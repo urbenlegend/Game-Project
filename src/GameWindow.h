@@ -1,5 +1,4 @@
-#ifndef GAMEWINDOW_H
-#define GAMEWINDOW_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -47,23 +46,4 @@ public:
 };
 
 // Functions to get information about game surface
-inline SDL_Surface* GameWindow::getSurface() {
-	return surface;
-}
-inline int GameWindow::width() {
-	return surface->w;
-}
-inline int GameWindow::height() {
-	return surface->h;
-}
-inline const vector<Object*>& GameWindow::getLevel() {
-	return level;
-}
-inline const vector<Object*>& GameWindow::getProjectiles() {
-	return projectiles;
-}
-inline const vector<Player*>& GameWindow::getPlayers() {
-	return players;
-}
 
-#endif // GAMEWINDOW_H

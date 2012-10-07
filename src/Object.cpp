@@ -5,6 +5,8 @@
 #include "GameWindow.h"
 #include "globals.h"
 
+using namespace std;
+
 Object::Object(SDL_Surface* image, int _x, int _y) {
 	surface = image;
 	window = NULL;
@@ -19,13 +21,33 @@ Object::~Object() {
 	SDL_FreeSurface(surface);
 }
 
+int Object::width() const {
+	if (surface == NULL) return 0;
+
+	if (anim_num == -1 || frame_num == -1)
+		return surface->w;
+	else
+		return sprites[anim_num][frame_num].area.w;
+}
+
+int Object::height() const {
+	if (surface == NULL) return 0;
+
+	if (anim_num == -1 || frame_num == -1)
+		return surface->h;
+	else
+		return sprites[anim_num][frame_num].area.h;
+}
+
 void Object::setWindow(GameWindow* win) {
 	window = win;
 	// Now that we know the window we should reformat the object surface
 	// to match the window's surface for faster blitting.
-	SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
-	SDL_FreeSurface(surface);
-	surface = temp;
+	if (surface != NULL) {
+		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
+		SDL_FreeSurface(surface);
+		surface = temp;
+	}
 }
 
 void Object::setSurface(SDL_Surface* image) {
@@ -34,7 +56,7 @@ void Object::setSurface(SDL_Surface* image) {
 	surface = image;
 
 	// Convert surface to window format if window is known
-	if (window != NULL) {
+	if (window != NULL && surface != NULL) {
 		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
 		SDL_FreeSurface(surface);
 		surface = temp;
@@ -57,7 +79,13 @@ int Object::loadSprite(string filename) {
 		vector<string> tokens;
 		split_tokens(line, tokens);
 		// If anim keyword appears, queue up a new sprite animation
-		if (tokens.size() > 0 && tokens[0] == "anim") {
+		if (tokens.size() >= 2 && tokens[0] == "sprite_sheet") {
+			setSurface(IMG_Load(tokens[1].c_str()));
+			if (surface == NULL) {
+				load_status = 2;
+			}
+		}
+		else if (tokens.size() > 0 && tokens[0] == "anim") {
 			vector<SpriteFrame> new_anim;
 			sprites.push_back(new_anim);
 		}
@@ -142,6 +170,8 @@ void Object::update() {
 
 // Draw function that blits object surface to the window
 void Object::draw() {
+	if (surface == NULL) return;
+
 	SDL_Rect drawRect = SDL_CreateRect(x, y);
 	// If no sprites, paint entire surface
 	if (anim_num == -1 || frame_num == -1)

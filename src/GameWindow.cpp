@@ -39,6 +39,25 @@ GameWindow::~GameWindow() {
 	}
 }
 
+SDL_Surface* GameWindow::getSurface() {
+	return surface;
+}
+int GameWindow::width() {
+	return surface->w;
+}
+int GameWindow::height() {
+	return surface->h;
+}
+const vector<Object*>& GameWindow::getLevel() {
+	return level;
+}
+const vector<Object*>& GameWindow::getProjectiles() {
+	return projectiles;
+}
+const vector<Player*>& GameWindow::getPlayers() {
+	return players;
+}
+
 // Tells game window to keep track of a level object
 void GameWindow::addLevelObj(Object* obj) {
 	obj->setWindow(this);
@@ -82,7 +101,6 @@ int GameWindow::loadLevel(string filename) {
 			infile >> tile_height;
 		else if (line == "player") {
 			player_t plr;
-			infile >> plr.pic;
 			infile >> plr.sprite;
 			infile >> plr.move_spd;
 			infile >> plr.jump_spd;
@@ -109,15 +127,9 @@ int GameWindow::loadLevel(string filename) {
 						size_t num = atoi(symbol);
 						// Load player
 						if (num < plrs.size()) {
-							SDL_Surface* player_pic = IMG_Load(plrs[num].pic.c_str());
-							if (player_pic != NULL) {
-								Player* new_player = new Player(player_pic, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
-								new_player->loadSprite(plrs[num].sprite);
-								addPlayer(new_player);
-							}
-							else {
-								load_status = 1;
-							}
+							Player* new_player = new Player(NULL, col*tile_width, row*tile_height, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
+							load_status = new_player->loadSprite(plrs[num].sprite);
+							addPlayer(new_player);
 						}
 						else {
 							load_status = 1;

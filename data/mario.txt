@@ -3,6 +3,8 @@
 # Using anim keyword again will indicate the start of another animation.
 # Each line after "anim" are frame definitions, with the following format: x y width height duration
 
+sprite_sheet data/mariosheet.png
+
 anim stand
 0 0 32 32 10
 
