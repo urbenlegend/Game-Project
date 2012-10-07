@@ -85,14 +85,12 @@
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Object.cpp" />
     <ClCompile Include="..\..\src\Player.cpp" />
-    <ClCompile Include="..\..\src\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\GameWindow.h" />
     <ClInclude Include="..\..\src\globals.h" />
     <ClInclude Include="..\..\src\Object.h" />
     <ClInclude Include="..\..\src\Player.h" />
-    <ClInclude Include="..\..\src\Sprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

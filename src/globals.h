@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GLOBALS_H_INCLUDED
+#define GLOBALS_H_INCLUDED
 
 #include <string>
 #include <vector>
@@ -67,3 +68,5 @@ inline SDL_Surface* IMG_OptimizedLoadAlpha(const char* filename) {
 	SDL_FreeSurface(loadedImage);
 	return optimizedImage;
 }
+
+#endif // GLOBALS_H_INCLUDED
