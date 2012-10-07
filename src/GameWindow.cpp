@@ -42,20 +42,25 @@ GameWindow::~GameWindow() {
 SDL_Surface* GameWindow::getSurface() {
 	return surface;
 }
+
 int GameWindow::width() {
 	return surface->w;
 }
+
 int GameWindow::height() {
 	return surface->h;
 }
-const vector<Object*>& GameWindow::getLevel() {
-	return level;
+
+vector<Object*>* GameWindow::getLevel() {
+	return &level;
 }
-const vector<Object*>& GameWindow::getProjectiles() {
-	return projectiles;
+
+vector<Object*>* GameWindow::getProjectiles() {
+	return &projectiles;
 }
-const vector<Player*>& GameWindow::getPlayers() {
-	return players;
+
+vector<Player*>* GameWindow::getPlayers() {
+	return &players;
 }
 
 // Tells game window to keep track of a level object

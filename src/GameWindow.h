@@ -30,9 +30,9 @@ public:
 	SDL_Surface* getSurface();
 	int width();
 	int height();
-	const vector<Object*>& getLevel();
-	const vector<Object*>& getProjectiles();
-	const vector<Player*>& getPlayers();
+	vector<Object*>* getLevel();
+	vector<Object*>* getProjectiles();
+	vector<Player*>* getPlayers();
 
 	void addLevelObj(Object* obj);
 	void addProjectile(Object* prj);

@@ -25,7 +25,7 @@ protected:
 	GameWindow* window;
 
 	// Sprite data
-	vector<vector<SpriteFrame> > sprites;
+	vector<vector<SpriteFrame>> sprites;
 	int anim_num;
 	int frame_num;
 	// The amount of time the frame has been displayed
