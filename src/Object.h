@@ -21,6 +21,8 @@ class Object {
 protected:
 	// Surface containing the object's appearance
 	SDL_Surface* surface;
+	// Variable indicating whether surface is shared with anything else. If so, do not free it in destructor
+	bool surfaceIsShared;
 	// Window this object is registered to
 	GameWindow* window;
 
@@ -36,14 +38,14 @@ public:
 	int x;
 	int y;
 
-	Object(SDL_Surface* image, int _x, int _y);
+	Object(int _x, int _y);
 	virtual ~Object();
 
 	int width() const;
 	int height() const;
 
 	virtual void setWindow(GameWindow* win);
-	virtual void setSurface(SDL_Surface* image);
+	virtual void setSurface(SDL_Surface* image, bool _surfaceIsShared = false);
 
 	virtual int loadSprite(string filename);
 	virtual void startSprite(int num);

@@ -21,7 +21,7 @@ public:
 	double move_spd;
 	double jump_spd;
 
-	Player(SDL_Surface* image, int _x, int _y, double _move_spd, double _jump_spd, double _ay);
+	Player(int _x, int _y, double _move_spd, double _jump_spd, double _ay);
 	virtual ~Player();
 
 	virtual void update();

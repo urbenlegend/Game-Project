@@ -11,7 +11,10 @@ double g_axfactor = 0.03;
 
 // Splits a string into several tokens separated by any character in the
 // delimiter string. Stores tokens into a vector array for easy access
-void split_tokens(const string line, vector<string>& tokens, string delimiter = " ") {
+void tokenize(const string line, vector<string>& tokens, string delimiter) {
+	// Clear tokens first
+	tokens.clear();
+
 	// Substring positions
 	size_t begin = 0;
 	size_t end = 0;

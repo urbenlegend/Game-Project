@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 	GameWindow window(1280, 800);
 
 	// Load level
-	int success = window.loadLevel("data/testlevel.txt");
+	int success = window.loadLevel("data/testlevel.lvl");
 
     // Begin game loop
 	window.play();

@@ -8,24 +8,27 @@
 
 using namespace std;
 
-Object::Object(SDL_Surface* image, int _x, int _y) {
-	surface = image;
-	window = NULL;
+Object::Object(int _x, int _y) {
 	x = _x;
 	y = _y;
+	surface = NULL;
+	surfaceIsShared = false;
+	window = NULL;
 	anim_num = -1;
-	frame_num = -1;
-	frame_duration = -1;
+	frame_num = 0;
+	frame_duration = 0;
 }
 
 Object::~Object() {
-	SDL_FreeSurface(surface);
+	if (!surfaceIsShared) {
+		SDL_FreeSurface(surface);
+	}
 }
 
 int Object::width() const {
 	if (surface == NULL) return 0;
 
-	if (anim_num == -1 || frame_num == -1)
+	if (anim_num < 0)
 		return surface->w;
 	else
 		return sprites[anim_num][frame_num].area.w;
@@ -34,7 +37,7 @@ int Object::width() const {
 int Object::height() const {
 	if (surface == NULL) return 0;
 
-	if (anim_num == -1 || frame_num == -1)
+	if (anim_num < 0)
 		return surface->h;
 	else
 		return sprites[anim_num][frame_num].area.h;
@@ -44,20 +47,23 @@ void Object::setWindow(GameWindow* win) {
 	window = win;
 	// Now that we know the window we should reformat the object surface
 	// to match the window's surface for faster blitting.
-	if (surface != NULL) {
+	if (surface != NULL && !surfaceIsShared) {
 		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
 		SDL_FreeSurface(surface);
 		surface = temp;
 	}
 }
 
-void Object::setSurface(SDL_Surface* image) {
+void Object::setSurface(SDL_Surface* image, bool _surfaceIsShared) {
 	// Delete previous surface and set image as surface
-	SDL_FreeSurface(surface);
+	if (!surfaceIsShared) {
+		SDL_FreeSurface(surface);
+	}
 	surface = image;
+	surfaceIsShared = _surfaceIsShared;
 
 	// Convert surface to window format if window is known
-	if (window != NULL && surface != NULL) {
+	if (window != NULL && surface != NULL && !surfaceIsShared) {
 		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
 		SDL_FreeSurface(surface);
 		surface = temp;
@@ -78,7 +84,7 @@ int Object::loadSprite(string filename) {
 		if (line[0] == '#') continue;
 
 		vector<string> tokens;
-		split_tokens(line, tokens);
+		tokenize(line, tokens);
 		// If anim keyword appears, queue up a new sprite animation
 		if (tokens.size() >= 2 && tokens[0] == "sprite_sheet") {
 			setSurface(IMG_Load(tokens[1].c_str()));
@@ -109,15 +115,15 @@ int Object::loadSprite(string filename) {
 }
 
 // Start sprite animation designated by num
-// Setting num to -1 turns off sprite animation
+// Setting num < 0 turns off sprite animation
 // Setting num to the current animation does nothing
 void Object::startSprite(int num) {
-	if (num == -1) {
+	if (anim_num == num) return;
+
+	if (num < 0) {
 		anim_num = -1;
-		frame_num = -1;
-		frame_duration = -1;
 	}
-	else if (anim_num != num && num < sprites.size()) {
+	else if (num >= 0 && num < sprites.size()) {
 		anim_num = num;
 		frame_num = 0;
 		frame_duration = 0;
@@ -126,7 +132,7 @@ void Object::startSprite(int num) {
 
 void Object::updateSprite() {
 	// Do nothing if sprite does not exist or no animation has been started
-	if (anim_num == -1 || frame_num == -1) return;
+	if (anim_num < 0) return;
 
 	// Move to next frame if previous frame has exceeded display duration
 	if (frame_duration > sprites[anim_num][frame_num].duration) {
@@ -175,9 +181,11 @@ void Object::draw() {
 
 	SDL_Rect drawRect = SDL_CreateRect(x, y);
 	// If no sprites, paint entire surface
-	if (anim_num == -1 || frame_num == -1)
+	if (anim_num < 0) {
 		SDL_BlitSurface(surface, NULL, window->getSurface(), &drawRect);
+	}
 	// If sprites are defined, paint sprite area only
-	else
+	else {
 		SDL_BlitSurface(surface, &sprites[anim_num][frame_num].area, window->getSurface(), &drawRect);
+	}
 }

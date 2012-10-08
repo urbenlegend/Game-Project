@@ -16,8 +16,12 @@ class GameWindow {
 private:
 	// Window surface
 	SDL_Surface* surface;
-	// Objects that are part of the level
-	vector<Object*> level;
+	// Tileset surface
+	SDL_Surface* tileset;
+	// Level tile objects
+	vector<vector<Object*>> level;
+	// General objects
+	vector<Object*> objects;
 	// Projectiles that in the game window
 	vector<Object*> projectiles;
 	// Players
@@ -30,11 +34,12 @@ public:
 	SDL_Surface* getSurface();
 	int width();
 	int height();
-	vector<Object*>* getLevel();
+	vector<vector<Object*>>* getLevel();
+	vector<Object*>* getObjects();
 	vector<Object*>* getProjectiles();
 	vector<Player*>* getPlayers();
 
-	void addLevelObj(Object* obj);
+	void addObject(Object* obj);
 	void addProjectile(Object* prj);
 	void addPlayer(Player* plyr);
 	int loadLevel(string filename);

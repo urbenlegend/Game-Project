@@ -1,0 +1,61 @@
+# Sprite syntax
+# Define start of animation using the "anim" keyword. All tokens after "anim" in the line are ignored by the program, but can be used to name animations.
+# Using anim keyword again will indicate the start of another animation.
+# Each line after "anim" are frame definitions, with the following format: x y width height duration
+
+anim A
+1 1 63 32 100
+
+anim B
+65 1 63 32 100
+
+anim C
+129 1 63 32 100
+
+anim D
+193 1 63 32 100
+
+anim E
+257 1 63 32 100
+
+anim F
+0 34 63 32 100
+
+anim G
+65 34 63 32 100
+
+anim H
+129 34 63 32 100
+
+anim I
+193 34 63 32 100
+
+anim J
+257 34 63 32 100
+
+anim K
+0 67 63 32 100
+
+anim L
+65 67 63 32 100
+
+anim M
+129 67 63 32 100
+
+anim N
+193 67 63 32 100
+
+anim O
+257 67 63 32 100
+
+anim P
+65 100 63 32 100
+
+anim Q
+129 100 63 32 100
+
+anim R
+193 100 63 32 100
+
+anim S
+385 1 63 32 100

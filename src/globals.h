@@ -14,7 +14,7 @@ extern double g_axfactor;
 
 // Splits a string into several tokens separated by any character in the
 // delimiter string. Stores tokens into a vector array for easy access
-void split_tokens(const string line, vector<string>& tokens, string delimiter = " ");
+void tokenize(const string line, vector<string>& tokens, string delimiter = " \t");
 
 // Cap fps
 void cap_fps(Uint32 start, Uint32 fps);
