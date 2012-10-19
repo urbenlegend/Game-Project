@@ -18,9 +18,10 @@ int main(int argc, char* argv[]) {
 
 	// Load level
 	int success = window.loadLevel("data/testlevel.lvl");
-
-    // Begin game loop
-	window.play();
+	if (success == 0) {
+		// Begin game loop
+		window.play();
+	}
 
 	SDL_Quit();
 

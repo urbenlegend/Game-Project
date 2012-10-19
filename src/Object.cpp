@@ -105,7 +105,7 @@ int Object::loadSprite(string filename) {
 			frame.duration = atoi(tokens[4].c_str());
 			sprites.back().push_back(frame);
 		}
-		else {
+		else if (tokens.size() > 0) {
 			load_status = 1;
 		}
 	}
