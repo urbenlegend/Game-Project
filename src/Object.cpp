@@ -1,6 +1,5 @@
 #include <fstream>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "SDL_headers.h"
 
 #include "Object.h"
 #include "GameWindow.h"

@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include <SDL.h>
+#include "SDL_headers.h"
 
 using namespace std;
 
@@ -49,6 +49,3 @@ public:
 
 	void play();
 };
-
-// Functions to get information about game surface
-

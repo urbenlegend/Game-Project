@@ -1,5 +1,5 @@
 #include <string>
-#include <SDL.h>
+#include "SDL_headers.h"
 
 #include "Player.h"
 #include "Object.h"
