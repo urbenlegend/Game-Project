@@ -14,6 +14,8 @@ protected:
 	bool midjump;
 public:
 	// Physics variables
+	double prevX;
+	double prevY;
 	double dx;
 	double dy;
 	double ax;

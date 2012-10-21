@@ -15,6 +15,7 @@ class GameWindow;
 struct SpriteFrame {
 	SDL_Rect area;
 	unsigned int duration;
+	bool isCollidable;
 };
 
 class Object {
@@ -23,6 +24,7 @@ protected:
 	SDL_Surface* surface;
 	// Variable indicating whether surface is shared with anything else. If so, do not free it in destructor
 	bool surfaceIsShared;
+	bool isCollidable;
 	// Window this object is registered to
 	GameWindow* window;
 
@@ -37,6 +39,23 @@ public:
 	// Position variables
 	int x;
 	int y;
+	float topA;
+	float topB;
+	float botA;
+	float botB;
+	
+	
+	//for isometric calculations
+	float getTopA_Yintercept();
+	float getTopB_Yintercept();
+	float getBotA_Yintercept();
+	float getBotB_Yintercept();
+
+
+	void updateTopA_intercept();
+	void updateTopB_intercept();
+	void updateBotA_intercept();
+	void updateBotB_intercept();
 
 	Object(int _x, int _y);
 	virtual ~Object();

@@ -39,6 +39,9 @@ GameWindow::~GameWindow() {
 	for (size_t i = 0; i < players.size(); i++) {
 		delete players[i];
 	}
+	// Deleting obstacles should be deleted from level objects since 
+	// we delete the actual object and the obstacle data structure only has
+	// pointers right? Or do we have to set those pointers to null?
 
 	// Delete surfaces
 	SDL_FreeSurface(tileset);
@@ -72,6 +75,10 @@ vector<Player*>* GameWindow::getPlayers() {
 	return &players;
 }
 
+vector<Object*>* GameWindow::getObstacles() {
+	return &obstacles;
+}
+
 // Tells game window to keep track of a level object
 void GameWindow::addObject(Object* obj) {
 	obj->setWindow(this);
@@ -82,6 +89,11 @@ void GameWindow::addObject(Object* obj) {
 void GameWindow::addProjectile(Object* prj) {
 	prj->setWindow(this);
 	projectiles.push_back(prj);
+}
+
+// Tells game window to keep track of a collidable object
+void GameWindow::addObstacle(Object* obj) {
+	obstacles.push_back(obj);
 }
 
 // Add player to window

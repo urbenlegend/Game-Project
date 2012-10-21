@@ -16,6 +16,7 @@ Object::Object(int _x, int _y) {
 	anim_num = -1;
 	frame_num = 0;
 	frame_duration = 0;
+	isCollidable = false;
 }
 
 Object::~Object() {
@@ -42,6 +43,28 @@ int Object::height() const {
 		return sprites[anim_num][frame_num].area.h;
 }
 
+float Object::getTopA_Yintercept() {
+	float slope = (float)height()/(float)width();
+	return (y - (slope*x) - height()/2.0);
+}
+float Object::getTopB_Yintercept() {
+	float slope = (float)height()/(float)width();
+	return (y - (slope*x) + height()/2.0);
+}
+float Object::getBotA_Yintercept() {
+	float slope = (float)height()/(float)width();
+	return (y + (slope*x) + height()/2);
+}
+float Object::getBotB_Yintercept() {
+	float slope = (float)height()/(float)width();
+	return (y + (slope*x) + ((3.0/2.0)*height()));
+	/*	float slope = (float)height()/(float)width();
+	float TopA2 = y - (slope*x) - height()/2.0;
+	float TopB2 = y - (slope*x) + height()/2.0;
+	float BottomA2 = y + (slope*x) + height()/2;
+	float BottomB2 = y + (slope*x) + ((3.0/2.0)*height());*/
+}
+
 void Object::setWindow(GameWindow* win) {
 	window = win;
 	// Now that we know the window we should reformat the object surface
@@ -52,6 +75,13 @@ void Object::setWindow(GameWindow* win) {
 		surface = temp;
 	}
 }
+
+
+void updateTopA_intercept() {
+
+}
+
+
 
 void Object::setSurface(SDL_Surface* image, bool _surfaceIsShared) {
 	// Delete previous surface and set image as surface
@@ -103,6 +133,13 @@ int Object::loadSprite(string filename) {
 			frame.area.w = atoi(tokens[2].c_str());
 			frame.area.h = atoi(tokens[3].c_str());
 			frame.duration = atoi(tokens[4].c_str());
+			/*just a hack..we need to probably redesign tiles and their
+			  surface relation - spsim */
+			if(tokens.size() >= 6 && tokens[5] == "*") {
+				frame.isCollidable = true;
+			} else {
+				frame.isCollidable = false;
+			}
 			sprites.back().push_back(frame);
 		}
 		else if (tokens.size() > 0) {
@@ -127,6 +164,12 @@ void Object::startSprite(int num) {
 		frame_num = 0;
 		frame_duration = 0;
 	}
+	//more hacks to get this thing working..
+	if(sprites[anim_num][frame_num].isCollidable) {
+		window->addObstacle(this);
+	} else {
+		//probably need to remove the object from obstacle list..
+	}
 }
 
 void Object::updateSprite() {
@@ -149,22 +192,39 @@ void Object::updateSprite() {
 }
 
 // Check for collision between two objects using basic bounding boxes
+// Modified for isometric purposes. I made up an algorithm using an imaginary
+// "Y Intercept" value and compares these values to each other.
+// Returns true on collision
 inline bool Object::checkCollision(Object& obj) const {
 	// Bounding extents for this object
-	int left1 = x;
-	int right1 = x + width() - 1;
-	int top1 = y;
-	int bottom1 = y + height() - 1;
-	// Bounding extents for obj
-	int left2 = obj.x;
-	int right2 = obj.x + obj.width() - 1;
-	int top2 = obj.y;
-	int bottom2 = obj.y + obj.height() - 1;
+	/*if (!obj.isCollidable) { 
+		return false;
+	}*/
+	float this_x = (float) x + width()*.25;
+	float this_y = (float) y + height()*.75;
+	float this_height = height()/4.0; //2.0 - hack to shrink bounding box
+	float this_width = width()/2.0;
+	float obj_x = (float) obj.x;
+	float obj_y = (float) obj.y;
+	float obj_height = obj.height();
+	float obj_width = obj.width();
 
-	if (left1 > right2) return false;
-	if (right1 < left2) return false;
-	if (top1 > bottom2) return false;
-	if (bottom1 < top2) return false;
+	float slope = this_height/this_width;
+	float TopA = this_y - (slope*this_x) - this_height/2;
+	float TopB = this_y - (slope*this_x) + this_height/2;
+	float BottomA = this_y + (slope*this_x) + this_height/2;
+	float BottomB = this_y + (slope*this_x) + ((3.0/2.0)*this_height);
+	// Bounding extents for obj
+	float slope2 = obj_height/obj_width;
+	float TopA2 = obj_y - (slope2*obj_x) - obj_height/2;
+	float TopB2 = obj_y - (slope2*obj_x) + obj_height/2;
+	float BottomA2 = obj_y + (slope2*obj_x) + obj_height/2;
+	float BottomB2 = obj_y + (slope2*obj_x) + ((3.0/2.0)*obj_height);
+
+	if (TopA > TopB2) return false;
+	if (TopB < TopA2) return false;
+	if (BottomA > BottomB2) return false;
+	if (BottomB < BottomA2) return false;
 
 	return true;
 }

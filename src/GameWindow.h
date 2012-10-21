@@ -26,6 +26,8 @@ private:
 	vector<Object*> projectiles;
 	// Players
 	vector<Player*> players;
+	// Collidable Objects
+	vector<Object *> obstacles;
 
 public:
 	GameWindow(int w, int h);
@@ -38,9 +40,11 @@ public:
 	vector<Object*>* getObjects();
 	vector<Object*>* getProjectiles();
 	vector<Player*>* getPlayers();
+	vector<Object*>* getObstacles();
 
 	void addObject(Object* obj);
 	void addProjectile(Object* prj);
+	void addObstacle(Object * collider);
 	void addPlayer(Player* plyr);
 	int loadLevel(string filename);
 

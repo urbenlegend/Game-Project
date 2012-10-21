@@ -2,7 +2,7 @@
 # Define start of animation using the "anim" keyword. All tokens after "anim" in the line are ignored by the program, but can be used to name animations.
 # Using anim keyword again will indicate the start of another animation.
 # Each line after "anim" are frame definitions, with the following format: x y width height duration
-
+# * <-- Denotes a collidable object
 anim A
 1 1 63 32 100
 
@@ -61,13 +61,13 @@ anim S
 385 1 63 32 100
 
 anim T
-1 100 63 32 100
+1 100 63 32 100 *
 
 anim U
-257 100 63 32 100
+257 100 63 32 100 *
 
 anim V
-1 133 63 32 100
+1 133 63 32 100 *
 
 anim W
 65 133 63 32 100
