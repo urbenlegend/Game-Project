@@ -67,7 +67,7 @@ void Player::update() {
 		// Otherwise do the standing animation
 		startSprite(0);
 	}
-    vector<Object*>& level = *window->getObstacles();
+    vector<Object*>& level = window->obstacles;
     for (i = 0; i < level.size(); i++) {
         if (checkCollision(*level[i])) {
 			Collided = true;

@@ -1,0 +1,61 @@
+# depslib dependency file v1.0
+1350639935 source:/media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/Player.cpp
+	<string>
+	"SDL_headers.h"
+	"Player.h"
+	"Object.h"
+	"GameWindow.h"
+	"globals.h"
+
+1350639835 /media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/SDL_headers.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL/SDL.h>
+	<SDL/SDL_image.h>
+
+1350639875 /media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/Player.h
+	"SDL_headers.h"
+	"Object.h"
+
+1350639875 /media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/Object.h
+	<string>
+	<vector>
+	"SDL_headers.h"
+
+1350639875 /media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/GameWindow.h
+	<vector>
+	<string>
+	"SDL_headers.h"
+
+1350639875 /media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/globals.h
+	<string>
+	<vector>
+	"SDL_headers.h"
+
+1350639935 source:/media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/main.cpp
+	<iostream>
+	"SDL_headers.h"
+	"GameWindow.h"
+	"Player.h"
+
+1350639907 source:/media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/GameWindow.cpp
+	<vector>
+	<fstream>
+	"SDL_headers.h"
+	"GameWindow.h"
+	"Object.h"
+	"Player.h"
+	"globals.h"
+
+1350639935 source:/media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/Object.cpp
+	<fstream>
+	"SDL_headers.h"
+	"Object.h"
+	"GameWindow.h"
+	"globals.h"
+
+1350639935 source:/media/FA4A00F14A00AC87/Users/Benjamin/Documents/GameProject/src/globals.cpp
+	<string>
+	<vector>
+	"SDL_headers.h"
+

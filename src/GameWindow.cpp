@@ -17,8 +17,15 @@ struct player_t {
 	double weight;
 };
 
-GameWindow::GameWindow(int w, int h) {
-	surface = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_ANYFORMAT);
+GameWindow::GameWindow(int w, int h) : textures([](SDL_Surface* for_del) {SDL_FreeSurface(for_del);}) {
+	cam_x = 0;
+	cam_y = 0;
+	// Initialize game window
+	window = SDL_SetVideoMode(w, h, 32, SDL_HWSURFACE|SDL_ANYFORMAT);
+	// Create a surface for game objects to paint on and add to asset manager.
+	textures.add("level_surface", SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000));
+	// Get surface pointer from asset manager
+	surface = textures["level_surface"];
 	tileset = NULL;
 }
 
@@ -48,7 +55,7 @@ GameWindow::~GameWindow() {
 }
 
 SDL_Surface* GameWindow::getSurface() {
-	return surface;
+	return surface.get();
 }
 
 int GameWindow::width() {
@@ -57,26 +64,6 @@ int GameWindow::width() {
 
 int GameWindow::height() {
 	return surface->h;
-}
-
-vector<vector<Object*>>* GameWindow::getLevel() {
-	return &level;
-}
-
-vector<Object*>* GameWindow::getObjects() {
-	return &objects;
-}
-
-vector<Object*>* GameWindow::getProjectiles() {
-	return &projectiles;
-}
-
-vector<Player*>* GameWindow::getPlayers() {
-	return &players;
-}
-
-vector<Object*>* GameWindow::getObstacles() {
-	return &obstacles;
 }
 
 // Tells game window to keep track of a level object
@@ -215,12 +202,17 @@ void GameWindow::update() {
 	for (size_t i = 0; i < players.size(); i++) {
 		players[i]->update();
 	}
+	
+	// Adjust camera
+	cam_x = players[0]->x - window->w/2;
+	cam_y = players[0]->y - window->h/2;
 }
 
 // Draw window
 void GameWindow::draw() {
 	// Blank screen
-	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
+	SDL_FillRect(window, NULL, SDL_MapRGB(surface->format, 0, 0, 0));
+	SDL_FillRect(surface.get(), NULL, SDL_MapRGB(surface->format, 0, 0, 0));
 
 	// Draw all level tiles
 	for (size_t y = 0; y < level.size(); y++) {
@@ -241,8 +233,14 @@ void GameWindow::draw() {
 		players[i]->draw();
 	}
 
+	// Paint surface onto window according to cam pos
+	SDL_Rect cam_rect;
+	cam_rect.x = -cam_x;
+	cam_rect.y = -cam_y;
+	SDL_BlitSurface(surface.get(), NULL, window, &cam_rect);
+
 	// Flip surface after all objects have drawn
-	SDL_Flip(surface);
+	SDL_Flip(window);
 }
 
 // Main game loop
@@ -262,7 +260,7 @@ void GameWindow::play() {
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 					return;
 				if (event.key.keysym.sym == SDLK_f) {
-					surface = SDL_SetVideoMode(surface->w, surface->h, 32, (surface->flags & SDL_FULLSCREEN ? surface->flags & ~SDL_FULLSCREEN: surface->flags | SDL_FULLSCREEN));
+					window = SDL_SetVideoMode(window->w, window->h, 32, (window->flags & SDL_FULLSCREEN ? window->flags & ~SDL_FULLSCREEN: window->flags | SDL_FULLSCREEN));
 				}
 			}
 		}

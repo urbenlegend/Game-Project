@@ -4,6 +4,8 @@
 #include <string>
 #include "SDL_headers.h"
 
+#include "Assets.h"
+
 using namespace std;
 
 class Object;
@@ -14,10 +16,19 @@ class Player;
  */
 class GameWindow {
 private:
+	// Camera pos
+	int cam_x;
+	int cam_y;
 	// Window surface
-	SDL_Surface* surface;
+	SDL_Surface* window;
+	// Level surface
+	shared_ptr<SDL_Surface> surface;
 	// Tileset surface
 	SDL_Surface* tileset;
+	// Assets
+	AssetManager<SDL_Surface> textures;
+	
+public:
 	// Level tile objects
 	vector<vector<Object*>> level;
 	// General objects
@@ -29,18 +40,12 @@ private:
 	// Collidable Objects
 	vector<Object *> obstacles;
 
-public:
 	GameWindow(int w, int h);
 	~GameWindow();
 
 	SDL_Surface* getSurface();
 	int width();
 	int height();
-	vector<vector<Object*>>* getLevel();
-	vector<Object*>* getObjects();
-	vector<Object*>* getProjectiles();
-	vector<Player*>* getPlayers();
-	vector<Object*>* getObstacles();
 
 	void addObject(Object* obj);
 	void addProjectile(Object* prj);
