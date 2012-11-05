@@ -18,12 +18,9 @@ public:
 	double prevY;
 	double dx;
 	double dy;
-	double ax;
-	double ay;
 	double move_spd;
-	double jump_spd;
 
-	Player(int _x, int _y, double _move_spd, double _jump_spd, double _ay);
+	Player(int _x, int _y, double _move_spd);
 	virtual ~Player();
 
 	virtual void update();

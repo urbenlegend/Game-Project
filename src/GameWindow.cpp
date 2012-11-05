@@ -5,19 +5,19 @@
 #include "GameWindow.h"
 #include "Object.h"
 #include "Player.h"
+#include "util.h"
 #include "globals.h"
+
+
 
 using namespace std;
 
 struct player_t {
-	string pic;
 	string sprite;
 	double move_spd;
-	double jump_spd;
-	double weight;
 };
 
-GameWindow::GameWindow(int w, int h) : textures([](SDL_Surface* for_del) {SDL_FreeSurface(for_del);}) {
+GameWindow::GameWindow(int w, int h) {
 	cam_x = 0;
 	cam_y = 0;
 	// Initialize game window
@@ -26,7 +26,6 @@ GameWindow::GameWindow(int w, int h) : textures([](SDL_Surface* for_del) {SDL_Fr
 	textures.add("level_surface", SDL_CreateRGBSurface(SDL_HWSURFACE, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000));
 	// Get surface pointer from asset manager
 	surface = textures["level_surface"];
-	tileset = NULL;
 }
 
 GameWindow::~GameWindow() {
@@ -46,12 +45,10 @@ GameWindow::~GameWindow() {
 	for (size_t i = 0; i < players.size(); i++) {
 		delete players[i];
 	}
-	// Deleting obstacles should be deleted from level objects since 
+	// Deleting obstacles should be deleted from level objects since
 	// we delete the actual object and the obstacle data structure only has
 	// pointers right? Or do we have to set those pointers to null?
 
-	// Delete surfaces
-	SDL_FreeSurface(tileset);
 }
 
 SDL_Surface* GameWindow::getSurface() {
@@ -113,16 +110,14 @@ int GameWindow::loadLevel(string filename) {
 
 		vector<string> line_tokens;
 		tokenize(line, line_tokens);
-		if (line_tokens.size() >= 5 && line_tokens[0] == "player") {
+		if (line_tokens.size() >= 3 && line_tokens[0] == "player") {
 			player_t plr;
 			plr.sprite = line_tokens[1];
 			plr.move_spd = atof(line_tokens[2].c_str());
-			plr.jump_spd = atof(line_tokens[3].c_str());
-			plr.weight = atof(line_tokens[4].c_str());
 			plrs.push_back(plr);
 		}
 		else if (line_tokens.size() >= 2 && line_tokens[0] == "tile_set") {
-			tileset = IMG_OptimizedLoadAlpha(line_tokens[1].c_str());
+			textures.add("level_tileset", IMG_OptimizedLoadAlpha(line_tokens[1].c_str()));
 			tile_data = line_tokens[2];
 		}
 		else if (line_tokens.size() >= 2 && line_tokens[0] == "tile_width") {
@@ -150,7 +145,7 @@ int GameWindow::loadLevel(string filename) {
 							size_t num = atoi(symbol);
 							// Load player
 							if (num < plrs.size()) {
-								Player* new_player = new Player(0, 0, plrs[num].move_spd, plrs[num].jump_spd, plrs[num].weight);
+								Player* new_player = new Player(0, 0, plrs[num].move_spd);
 								load_status = new_player->loadSprite(plrs[num].sprite);
 								new_player->x = width()/2 + tile_width/2 * col - tile_width/2 * row;
 								new_player->y = tile_height/2 * col + tile_height/2 * row;
@@ -166,7 +161,7 @@ int GameWindow::loadLevel(string filename) {
 							// Load tile_set as sprite data. Start sprite for the tile indicated by the map index so that we can get size data
 							// Currently assuming that the map index starts at char 'A'. Can change this later.
 							tile->setWindow(this);
-							tile->setSurface(tileset, true);
+							tile->setSurface(textures["level_tileset"]);
 							tile->loadSprite(tile_data.c_str());
 							tile->startSprite(line[col] - 'A');
 							tile->x = width()/2 + tile_width/2 * col - tile_width/2 * row;
@@ -202,7 +197,7 @@ void GameWindow::update() {
 	for (size_t i = 0; i < players.size(); i++) {
 		players[i]->update();
 	}
-	
+
 	// Adjust camera
 	cam_x = players[0]->x - window->w/2;
 	cam_y = players[0]->y - window->h/2;

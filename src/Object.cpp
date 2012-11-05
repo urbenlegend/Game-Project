@@ -3,7 +3,7 @@
 
 #include "Object.h"
 #include "GameWindow.h"
-#include "globals.h"
+#include "util.h"
 
 using namespace std;
 
@@ -11,7 +11,6 @@ Object::Object(int _x, int _y) {
 	x = _x;
 	y = _y;
 	surface = NULL;
-	surfaceIsShared = false;
 	window = NULL;
 	anim_num = -1;
 	frame_num = 0;
@@ -20,9 +19,7 @@ Object::Object(int _x, int _y) {
 }
 
 Object::~Object() {
-	if (!surfaceIsShared) {
-		SDL_FreeSurface(surface);
-	}
+
 }
 
 int Object::width() const {
@@ -43,60 +40,34 @@ int Object::height() const {
 		return sprites[anim_num][frame_num].area.h;
 }
 
-float Object::getTopA_Yintercept() {
-	float slope = (float)height()/(float)width();
+double Object::getTopA_Yintercept() {
+	double slope = (double)height()/(double)width();
 	return (y - (slope*x) - height()/2.0);
 }
-float Object::getTopB_Yintercept() {
-	float slope = (float)height()/(float)width();
+double Object::getTopB_Yintercept() {
+	double slope = (double)height()/(double)width();
 	return (y - (slope*x) + height()/2.0);
 }
-float Object::getBotA_Yintercept() {
-	float slope = (float)height()/(float)width();
+double Object::getBotA_Yintercept() {
+	double slope = (double)height()/(double)width();
 	return (y + (slope*x) + height()/2);
 }
-float Object::getBotB_Yintercept() {
-	float slope = (float)height()/(float)width();
+double Object::getBotB_Yintercept() {
+	double slope = (double)height()/(double)width();
 	return (y + (slope*x) + ((3.0/2.0)*height()));
-	/*	float slope = (float)height()/(float)width();
-	float TopA2 = y - (slope*x) - height()/2.0;
-	float TopB2 = y - (slope*x) + height()/2.0;
-	float BottomA2 = y + (slope*x) + height()/2;
-	float BottomB2 = y + (slope*x) + ((3.0/2.0)*height());*/
+	/*	double slope = (double)height()/(double)width();
+	double TopA2 = y - (slope*x) - height()/2.0;
+	double TopB2 = y - (slope*x) + height()/2.0;
+	double BottomA2 = y + (slope*x) + height()/2;
+	double BottomB2 = y + (slope*x) + ((3.0/2.0)*height());*/
 }
 
 void Object::setWindow(GameWindow* win) {
 	window = win;
-	// Now that we know the window we should reformat the object surface
-	// to match the window's surface for faster blitting.
-	if (surface != NULL && !surfaceIsShared) {
-		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
-		SDL_FreeSurface(surface);
-		surface = temp;
-	}
 }
 
-
-void updateTopA_intercept() {
-
-}
-
-
-
-void Object::setSurface(SDL_Surface* image, bool _surfaceIsShared) {
-	// Delete previous surface and set image as surface
-	if (!surfaceIsShared) {
-		SDL_FreeSurface(surface);
-	}
+void Object::setSurface(shared_ptr<SDL_Surface> image) {
 	surface = image;
-	surfaceIsShared = _surfaceIsShared;
-
-	// Convert surface to window format if window is known
-	if (window != NULL && surface != NULL && !surfaceIsShared) {
-		SDL_Surface* temp = SDL_DisplayFormatAlpha(surface);
-		SDL_FreeSurface(surface);
-		surface = temp;
-	}
 }
 
 // Load sprite data
@@ -116,7 +87,8 @@ int Object::loadSprite(string filename) {
 		tokenize(line, tokens);
 		// If anim keyword appears, queue up a new sprite animation
 		if (tokens.size() >= 2 && tokens[0] == "sprite_sheet") {
-			setSurface(IMG_Load(tokens[1].c_str()));
+			// TODO: Set deleter to SDL_FreeSurface
+			setSurface(shared_ptr<SDL_Surface>(IMG_OptimizedLoadAlpha(tokens[1].c_str()), [](SDL_Surface* for_del) {SDL_FreeSurface(for_del);}));
 			if (surface == NULL) {
 				load_status = 2;
 			}
@@ -197,29 +169,29 @@ void Object::updateSprite() {
 // Returns true on collision
 inline bool Object::checkCollision(Object& obj) const {
 	// Bounding extents for this object
-	/*if (!obj.isCollidable) { 
+	/*if (!obj.isCollidable) {
 		return false;
 	}*/
-	float this_x = (float) x + width()*.25;
-	float this_y = (float) y + height()*.75;
-	float this_height = height()/4.0; //2.0 - hack to shrink bounding box
-	float this_width = width()/2.0;
-	float obj_x = (float) obj.x;
-	float obj_y = (float) obj.y;
-	float obj_height = obj.height();
-	float obj_width = obj.width();
+	double this_x = x + width()*.25;
+	double this_y = y + height()*.75;
+	double this_height = height()/4.0; //2.0 - hack to shrink bounding box
+	double this_width = width()/2.0;
+	double obj_x = obj.x;
+	double obj_y = obj.y;
+	double obj_height = obj.height();
+	double obj_width = obj.width();
 
-	float slope = this_height/this_width;
-	float TopA = this_y - (slope*this_x) - this_height/2;
-	float TopB = this_y - (slope*this_x) + this_height/2;
-	float BottomA = this_y + (slope*this_x) + this_height/2;
-	float BottomB = this_y + (slope*this_x) + ((3.0/2.0)*this_height);
+	double slope = this_height/this_width;
+	double TopA = this_y - (slope*this_x) - this_height/2;
+	double TopB = this_y - (slope*this_x) + this_height/2;
+	double BottomA = this_y + (slope*this_x) + this_height/2;
+	double BottomB = this_y + (slope*this_x) + ((3.0/2.0)*this_height);
 	// Bounding extents for obj
-	float slope2 = obj_height/obj_width;
-	float TopA2 = obj_y - (slope2*obj_x) - obj_height/2;
-	float TopB2 = obj_y - (slope2*obj_x) + obj_height/2;
-	float BottomA2 = obj_y + (slope2*obj_x) + obj_height/2;
-	float BottomB2 = obj_y + (slope2*obj_x) + ((3.0/2.0)*obj_height);
+	double slope2 = obj_height/obj_width;
+	double TopA2 = obj_y - (slope2*obj_x) - obj_height/2;
+	double TopB2 = obj_y - (slope2*obj_x) + obj_height/2;
+	double BottomA2 = obj_y + (slope2*obj_x) + obj_height/2;
+	double BottomB2 = obj_y + (slope2*obj_x) + ((3.0/2.0)*obj_height);
 
 	if (TopA > TopB2) return false;
 	if (TopB < TopA2) return false;
@@ -241,10 +213,10 @@ void Object::draw() {
 	SDL_Rect drawRect = SDL_CreateRect(x, y);
 	// If no sprites, paint entire surface
 	if (anim_num < 0) {
-		SDL_BlitSurface(surface, NULL, window->getSurface(), &drawRect);
+		SDL_BlitSurface(surface.get(), NULL, window->getSurface(), &drawRect);
 	}
 	// If sprites are defined, paint sprite area only
 	else {
-		SDL_BlitSurface(surface, &sprites[anim_num][frame_num].area, window->getSurface(), &drawRect);
+		SDL_BlitSurface(surface.get(), &sprites[anim_num][frame_num].area, window->getSurface(), &drawRect);
 	}
 }

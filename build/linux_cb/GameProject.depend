@@ -59,3 +59,86 @@
 	<vector>
 	"SDL_headers.h"
 
+1352098463 source:/home/ben/Documents/GameProject/src/GameWindow.cpp
+	<vector>
+	<fstream>
+	"SDL_headers.h"
+	"GameWindow.h"
+	"Object.h"
+	"Player.h"
+	"util.h"
+	"globals.h"
+
+1350644194 /home/ben/Documents/GameProject/src/SDL_headers.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL/SDL.h>
+	<SDL/SDL_image.h>
+
+1352096347 /home/ben/Documents/GameProject/src/GameWindow.h
+	<vector>
+	<string>
+	<memory>
+	"SDL_headers.h"
+
+1352097288 /home/ben/Documents/GameProject/src/Assets.h
+	<map>
+	<string>
+	<atomic>
+	<mutex>
+	<memory>
+	"SDL_headers.h"
+
+1352096841 /home/ben/Documents/GameProject/src/globals.h
+	"SDL_headers.h"
+	"Assets.h"
+
+1352095160 /home/ben/Documents/GameProject/src/Object.h
+	<string>
+	<vector>
+	<memory>
+	"SDL_headers.h"
+
+1352090442 /home/ben/Documents/GameProject/src/Player.h
+	"SDL_headers.h"
+	"Object.h"
+
+1352089889 /home/ben/Documents/GameProject/src/util.h
+	<string>
+	<vector>
+	"SDL_headers.h"
+
+1352096928 source:/home/ben/Documents/GameProject/src/globals.cpp
+	"SDL_headers.h"
+	"Assets.h"
+
+1352091626 source:/home/ben/Documents/GameProject/src/Player.cpp
+	<string>
+	"SDL_headers.h"
+	"Player.h"
+	"Object.h"
+	"GameWindow.h"
+	"util.h"
+
+1352095160 source:/home/ben/Documents/GameProject/src/Object.cpp
+	<fstream>
+	"SDL_headers.h"
+	"Object.h"
+	"GameWindow.h"
+	"util.h"
+
+1352091449 source:/home/ben/Documents/GameProject/src/util.cpp
+	<string>
+	<vector>
+	"SDL_headers.h"
+
+1352061552 source:/home/ben/Documents/GameProject/src/Assets.cpp
+	"SDL_headers.h"
+	"Assets.h"
+
+1352089889 source:/home/ben/Documents/GameProject/src/main.cpp
+	<iostream>
+	"SDL_headers.h"
+	"GameWindow.h"
+	"Player.h"
+

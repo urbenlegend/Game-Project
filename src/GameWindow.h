@@ -2,9 +2,8 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "SDL_headers.h"
-
-#include "Assets.h"
 
 using namespace std;
 
@@ -23,11 +22,7 @@ private:
 	SDL_Surface* window;
 	// Level surface
 	shared_ptr<SDL_Surface> surface;
-	// Tileset surface
-	SDL_Surface* tileset;
-	// Assets
-	AssetManager<SDL_Surface> textures;
-	
+
 public:
 	// Level tile objects
 	vector<vector<Object*>> level;

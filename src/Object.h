@@ -1,7 +1,11 @@
+#ifndef HEADER_11C442C6F90CC17E
+#define HEADER_11C442C6F90CC17E
+
 #pragma once
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "SDL_headers.h"
 
 using namespace std;
@@ -21,12 +25,10 @@ struct SpriteFrame {
 class Object {
 protected:
 	// Surface containing the object's appearance
-	SDL_Surface* surface;
-	// Variable indicating whether surface is shared with anything else. If so, do not free it in destructor
-	bool surfaceIsShared;
-	bool isCollidable;
+	shared_ptr<SDL_Surface> surface;
 	// Window this object is registered to
 	GameWindow* window;
+	bool isCollidable;
 
 	// Sprite data
 	vector<vector<SpriteFrame>> sprites;
@@ -39,23 +41,11 @@ public:
 	// Position variables
 	int x;
 	int y;
-	float topA;
-	float topB;
-	float botA;
-	float botB;
-	
-	
-	//for isometric calculations
-	float getTopA_Yintercept();
-	float getTopB_Yintercept();
-	float getBotA_Yintercept();
-	float getBotB_Yintercept();
-
-
-	void updateTopA_intercept();
-	void updateTopB_intercept();
-	void updateBotA_intercept();
-	void updateBotB_intercept();
+	// Isometric y-intercepts
+	double topA;
+	double topB;
+	double botA;
+	double botB;
 
 	Object(int _x, int _y);
 	virtual ~Object();
@@ -64,14 +54,21 @@ public:
 	int height() const;
 
 	virtual void setWindow(GameWindow* win);
-	virtual void setSurface(SDL_Surface* image, bool _surfaceIsShared = false);
+	virtual void setSurface(shared_ptr<SDL_Surface> image);
 
 	virtual int loadSprite(string filename);
 	virtual void startSprite(int num);
 	virtual void updateSprite();
 
 	virtual bool checkCollision(Object& obj) const;
+	// For isometric calculations
+	double getTopA_Yintercept();
+	double getTopB_Yintercept();
+	double getBotA_Yintercept();
+	double getBotB_Yintercept();
 
 	virtual void update();
 	virtual void draw();
 };
+
+#endif // header guard 

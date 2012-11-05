@@ -7,8 +7,6 @@
 #include <memory>
 #include "SDL_headers.h"
 
-#include "globals.h"
-
 using namespace std;
 
 typedef SDL_Rect Rect;
@@ -52,7 +50,7 @@ public:
 	Texture& operator=(const Texture& other);
 	Texture& operator=(Texture&& other);
 	~Texture();
-	
+
 	SDL_Surface* getSDLSurface();
 	int width();
 	int height();
@@ -62,13 +60,8 @@ public:
 
 };
 
-class AudioClip {
-
-};
-
 typedef atomic<int> G_Int;
 typedef atomic<double> G_Double;
-typedef atomic<AudioClip> G_AudioClip;
 
 template <typename T>
 class AssetManager {
@@ -79,60 +72,78 @@ private:
 	void (*deleter)(T*);
 
 public:
-	AssetManager<T>(void (*_deleter)(T*) = NULL) {
-		deleter = _deleter;
-	}
+	AssetManager<T>(void (*_deleter)(T*) = NULL);
 
-	shared_ptr<T> get(string id) {
-		lock_guard<mutex> lock(map_lock);
-		auto itr = assets.find(id);
-		if (itr != assets.end()) {
-			return itr->second;
-		}
-		else {
-			return NULL;
-		}
-	}
+	shared_ptr<T> get(string id);
+	shared_ptr<T> operator[](string id);
 
-	shared_ptr<T> operator[](string id) {
-		return get(id);
-	}
+	void add(string id, T* value = NULL, void (*_del)(T*) = NULL);
+	void remove(string id);
 
-	void add(string id, T* value = NULL, void (*_del)(T*) = NULL) {
-		lock_guard<mutex> lock(map_lock);
-		// Add value to assets, along with an optional deleter
-		void (*del)(T*) = _del ? _del : deleter;
-
-		if (del == NULL) {
-			assets[id] = shared_ptr<T>(value);
-		}
-		else {
-			assets[id] = shared_ptr<T>(value, del);
-		}
-		// Add a mutex lock associated with the asset
-		element_locks[id] = shared_ptr<mutex>(new mutex());
-	}
-	
-	void remove(string id) {
-		lock_guard<mutex> lock(map_lock);
-		assets.erase(id);
-		element_locks.erase(id);
-	}
-
-	void lock(string id) {
-		lock_guard<mutex> lock(map_lock);
-		auto itr = element_locks.find(id);
-		if (itr != element_locks.end()) {
-			itr->second->lock();
-		}
-	}
-
-	void unlock(string id) {
-		lock_guard<mutex> lock(map_lock);
-		auto itr = element_locks.find(id);
-		if (itr != element_locks.end()) {
-			itr->second->unlock();
-		}
-	}
+	void lock(string id);
+	void unlock(string id);
 };
+
+template <typename T>
+AssetManager<T>::AssetManager(void (*_deleter)(T*)) {
+	deleter = _deleter;
+}
+
+template <typename T>
+shared_ptr<T> AssetManager<T>::get(string id) {
+	lock_guard<mutex> lock(map_lock);
+	auto itr = assets.find(id);
+	if (itr != assets.end()) {
+		return itr->second;
+	}
+	else {
+		return NULL;
+	}
+}
+
+template <typename T>
+shared_ptr<T> AssetManager<T>::operator[](string id) {
+	return get(id);
+}
+
+template <typename T>
+void AssetManager<T>::add(string id, T* value, void (*_del)(T*)) {
+	lock_guard<mutex> lock(map_lock);
+	// Add value to assets, along with an optional deleter
+	void (*del)(T*) = _del ? _del : deleter;
+
+	if (del == NULL) {
+		assets[id] = shared_ptr<T>(value);
+	}
+	else {
+		assets[id] = shared_ptr<T>(value, del);
+	}
+	// Add a mutex lock associated with the asset
+	element_locks[id] = shared_ptr<mutex>(new mutex());
+}
+
+template <typename T>
+void AssetManager<T>::remove(string id) {
+	lock_guard<mutex> lock(map_lock);
+	assets.erase(id);
+	element_locks.erase(id);
+}
+
+template <typename T>
+void AssetManager<T>::lock(string id) {
+	lock_guard<mutex> lock(map_lock);
+	auto itr = element_locks.find(id);
+	if (itr != element_locks.end()) {
+		itr->second->lock();
+	}
+}
+
+template <typename T>
+void AssetManager<T>::unlock(string id) {
+	lock_guard<mutex> lock(map_lock);
+	auto itr = element_locks.find(id);
+	if (itr != element_locks.end()) {
+		itr->second->unlock();
+	}
+}
 

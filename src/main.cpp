@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+
 int main(int argc, char* argv[]) {
 	// Initialize SDL video
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {

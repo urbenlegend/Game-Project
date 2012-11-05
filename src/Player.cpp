@@ -3,18 +3,15 @@
 #include "Player.h"
 #include "Object.h"
 #include "GameWindow.h"
-#include "globals.h"
+#include "util.h"
 
 using namespace std;
 
-Player::Player(int _x, int _y, double _move_spd, double _jump_spd, double _ay) : Object(_x, _y) {
+Player::Player(int _x, int _y, double _move_spd) : Object(_x, _y) {
 	midjump = false;
 	dx = 0;
 	dy = 0;
-	ax = 0;
-	ay = _ay;
 	move_spd = _move_spd;
-	jump_spd = _jump_spd;
 }
 
 Player::~Player() {
@@ -27,38 +24,37 @@ void Player::update() {
 	bool Collided = false;
 	int dx = 0;
 	int dy = 0;
-	size_t i = 0;
 
 	//hacked parameters to determine where x/y should be on collision
-	float this_x = (float) x + width()*.25;
-	float this_y = (float) y + height()*.75;
-	float this_height = height()/4.0; //4.0 - hack to shrink bounding box
-	float this_width = width()/2.0;    // to the right size and ratio
-	float slope = this_height/this_width;
-	float antislope = this_width/this_height;
+	double this_x = x + width()*.25;
+	double this_y = y + height()*.75;
+	double this_height = height()/4.0; //4.0 - hack to shrink bounding box
+	double this_width = width()/2.0;    // to the right size and ratio
+	double slope = this_height/this_width;
+	double antislope = this_width/this_height;
 
 	// Set velocities according to user input
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	if (keystate[SDLK_UP] && dy == 0 && midjump == false) {
-		dy = -3;
+		dy = -move_spd;
 		y += dy;
 		// Initiate walking animation
 		startSprite(1);
 	}
 	else if (keystate[SDLK_DOWN]) {
-		dy = 3;
+		dy = move_spd;
 		y += dy;
 		// Initiate walking animation
 		startSprite(1);
 	}
 	if (keystate[SDLK_LEFT]) {
-		dx = -3;
+		dx = -move_spd;
 		x += dx;
 		// Initiate walking animation
 		startSprite(1);
 	}
 	else if (keystate[SDLK_RIGHT]) {
-		dx = 3;
+		dx = move_spd;
 		x += dx;
 		// Initiate walking animation
 		startSprite(1);
@@ -68,7 +64,7 @@ void Player::update() {
 		startSprite(0);
 	}
     vector<Object*>& level = window->obstacles;
-    for (i = 0; i < level.size(); i++) {
+    for (size_t i = 0; i < level.size(); i++) {
         if (checkCollision(*level[i])) {
 			Collided = true;
 			break;
